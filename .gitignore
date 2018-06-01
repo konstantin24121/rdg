@@ -69,3 +69,4 @@ typings/
 # Build
 public
 reports
+db.json

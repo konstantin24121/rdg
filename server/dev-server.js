@@ -4,10 +4,10 @@ const devMiddleware = require('webpack-dev-middleware');
 const hotMiddleware = require('webpack-hot-middleware');
 const webpackConfig = require('../implements/webpack.config');
 
-module.exports = function makeDevServer(server) {
+module.exports = function makeDevServer(app) {
   const compiler = webpack(webpackConfig);
 
-  server.use(devMiddleware(compiler, {
+  app.use(devMiddleware(compiler, {
     publicPath: webpackConfig.output.publicPath,
     historyApiFallback: true,
     stats: {
@@ -17,9 +17,9 @@ module.exports = function makeDevServer(server) {
     },
   }));
 
-  server.use(hotMiddleware(compiler));
+  app.use(hotMiddleware(compiler));
 
-  server.use('*', (req, res, next) => {
+  app.get('/', (req, res, next) => {
     const filename = path.join(compiler.outputPath, 'index.html');
     compiler.outputFileSystem.readFile(filename, (err, result) => {
       if (err) {

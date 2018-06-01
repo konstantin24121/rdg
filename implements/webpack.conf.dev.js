@@ -1,9 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 
-const host = process.env.HOST || 'localhost';
-const port = (+process.env.PORT) || 3000;
-
 module.exports = {
   mode: 'development',
 	devtool: 'eval-source-map',

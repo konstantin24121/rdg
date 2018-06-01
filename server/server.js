@@ -1,23 +1,43 @@
 const express = require('express');
+const path = require('path');
+const http = require('http');
+const bodyParser = require('body-parser');
+const low = require('lowdb');
+const lodashId = require('lodash-id');
+const FileAsync = require('lowdb/adapters/FileAsync');
+
+const createApi = require('./api');
 const makeDevServer = require('./dev-server');
 const makeProdServer = require('./prod-server');
 
-const host = process.env.HOST || 'localhost';
-const port = (+process.env.PORT) || 3000;
 const isDevelopment = process.env.NODE_ENV === 'development';
+const serverPath = path.join(process.cwd(), 'server');
 
-const server = express();
+const app = express();
+app.set('port', (+process.env.PORT) || 3000);
+app.use(bodyParser.json());
 
-if (isDevelopment) {
-  makeDevServer(server);
-} else {
-  makeProdServer(server);
-}
+const adapter = new FileAsync(path.join(serverPath, 'db.json'));
+low(adapter).then((db) => {
+  db._.mixin(lodashId);
+  createApi(app, db);
 
-server.listen(port, host, (err) => {
-  if (err) {
-    return console.error(err);
+  // Set db default values
+  return db.defaults({
+    deals: [],
+  }).write();
+}).then(() => {
+  if (isDevelopment) {
+    makeDevServer(app);
+  } else {
+    makeProdServer(app);
   }
 
-  return console.info('==> 💻  Open http://%s:%s in a browser to view the app.', host, port);
+  http.createServer(app).listen(app.get('port'), (err) => {
+    if (err) {
+      return console.error(err);
+    }
+
+    return console.info(`==> 💻  Open http://localhost:${app.get('port')} in a browser to view the app.`);
+  });
 });
