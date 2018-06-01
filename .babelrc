@@ -1,0 +1,15 @@
+{
+  "presets": [
+    ["@babel/preset-env", {
+      "useBuiltIns": "usage",
+      "targets": {
+        "browsers": ["last 2 versions", "safari > 9", "ie 11"]
+      },
+      "shippedProposals": true,
+    }],
+    ["@babel/preset-stage-0", {
+      "decoratorsLegacy": true,
+      "loose": true,
+    }],
+  ],
+}

@@ -1,0 +1,67 @@
+{
+  "name": "ibit-test",
+  "version": "1.0.0",
+  "author": "Konstantin <konstantin24121@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "better-npm-run start-dev",
+    "start:prod": "npm run build && better-npm-run start-prod",
+    "prebuild": "rimraf public",
+    "build": "better-npm-run build",
+    "lint": "npm run eslint",
+    "eslint": "eslint --ext .jsx --ext .js client"
+  },
+  "betterScripts": {
+    "start-dev": {
+      "command": "node ./server/server.js",
+      "env": {
+        "NODE_ENV": "development",
+        "PORT": 3000
+      }
+    },
+    "build": {
+      "command": "webpack --colors --progress --display-error-details --config ./implements/webpack.config.js",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "start-prod": {
+      "command": "node ./server/server.js",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  },
+  "dependencies": {
+    "@babel/cli": "^7.0.0-beta.49",
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/preset-env": "^7.0.0-beta.49",
+    "@babel/preset-stage-0": "^7.0.0-beta.49",
+    "babel-eslint": "^8.2.3",
+    "babel-loader": "^8.0.0-beta.3",
+    "better-npm-run": "^0.1.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.8.2",
+    "express": "^4.16.3",
+    "html-webpack-plugin": "^3.2.0",
+    "lowdb": "^1.0.0",
+    "prop-types": "^15.6.1",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react-hot-loader": "^4.0.0",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
+    "rimraf": "^2.6.2",
+    "uglifyjs-webpack-plugin": "^1.2.5",
+    "webpack": "^4.10.2",
+    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-cli": "^2.1.4",
+    "webpack-dev-middleware": "^3.1.3",
+    "webpack-hot-middleware": "^2.22.2",
+    "webpack-merge": "^4.1.2"
+  }
+}
