@@ -20,6 +20,13 @@ app.use(bodyParser.json());
 const adapter = new FileAsync(path.join(serverPath, 'db.json'));
 low(adapter).then((db) => {
   db._.mixin(lodashId);
+  // Rewrite lodashId createID function
+  // Use increment instead uuid
+  // https://github.com/typicode/lodash-id
+  // eslint-disable-next-line no-param-reassign
+  db._.createId = function createId(collection) {
+    return this.last(collection).id + 1 || 0;
+  };
   createApi(app, db);
 
   // Set db default values
