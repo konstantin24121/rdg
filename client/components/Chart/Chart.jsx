@@ -57,7 +57,7 @@ class Chart extends Component {
     ctx.fillText(yKeys[yKeys.length - 1].label, yAxisLabelLine, height);
 
     ctx.textBaseline = 'top';
-    ctx.fillText(xKeys[0].label, 0, xAxisLabelLine);
+    ctx.fillText(xKeys[0].label, BORDER_OFFSET, xAxisLabelLine);
     ctx.textAlign = 'center';
     for (let i = 1; i < xNumber; i += 1) {
       ctx.beginPath();
@@ -71,7 +71,7 @@ class Chart extends Component {
   }
 
   drawLine = ({ ctx, width, height }) => {
-    const { xKeys, yKeys, data } = this.props;
+    const { xKeys, yKeys, data, dataKeyX, dataKeyY } = this.props;
     const xStep = (xKeys[xKeys.length - 1].value - xKeys[0].value) / width;
     const yStep = (yKeys[yKeys.length - 1].value - yKeys[0].value) / height;
 
@@ -80,17 +80,21 @@ class Chart extends Component {
     ctx.lineWidth = 4;
     for (let i = 0; i < data.length; i += 1) {
       const point = data[i];
-      const x = (point.date - xKeys[0].value) / xStep;
-      const y = (point.value - yKeys[0].value) / yStep;
+      const x = (point[dataKeyX] - xKeys[0].value) / xStep;
+      const y = (point[dataKeyY] - yKeys[0].value) / yStep;
 
       if (i + 1 < data.length) {
         const nextPoint = data[i + 1];
         ctx.beginPath();
-        const nextX = (nextPoint.date - xKeys[0].value) / xStep;
-        const nextY = (nextPoint.value - yKeys[0].value) / yStep;
-        const realX = nextX < BORDER_OFFSET ? BORDER_OFFSET : nextX;
-        const z = Math.abs(nextX) / x;
-        const realY = nextX < BORDER_OFFSET ? nextY / z : nextY;
+        const nextX = (nextPoint[dataKeyX] - xKeys[0].value) / xStep;
+        const nextY = (nextPoint[dataKeyY] - yKeys[0].value) / yStep;
+        let realX = nextX;
+        let realY = nextY;
+        if (nextX < BORDER_OFFSET) {
+          realX = BORDER_OFFSET;
+          const a = (nextY - y) / (nextX - x);
+          realY = nextY - (a * nextX);
+        }
         ctx.moveTo(x, y);
         ctx.lineTo(realX, realY);
         ctx.stroke();
@@ -162,6 +166,8 @@ const dataShape = PropTypes.arrayOf(
 );
 
 Chart.propTypes = {
+  dataKeyX: PropTypes.string.isRequired,
+  dataKeyY: PropTypes.string.isRequired,
   yKeys: keyShape.isRequired,
   xKeys: keyShape.isRequired,
   data: dataShape.isRequired,

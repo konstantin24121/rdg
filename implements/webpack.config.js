@@ -37,6 +37,20 @@ const common = {
 				include: [src],
 				loader: 'babel-loader',
 			},
+      {
+        test: /\.svg$/,
+        include: [src],
+        use: [
+          {
+            loader: "babel-loader",
+          }, {
+            loader: 'react-svg-loader',
+            options: {
+              jsx: true,
+            }
+          }
+        ],
+      },
     ],
 	},
 
