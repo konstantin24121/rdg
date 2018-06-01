@@ -11,6 +11,7 @@ global.assetsPath = path.resolve(context, 'public');
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = !isDevelopment;
+const isLint = process.env.NODE_ENV === 'linter';
 
 const common = {
 	context: context,
@@ -23,6 +24,7 @@ const common = {
 		extensions: ['.js', '.jsx', '.json'],
 		alias: {
       components: path.resolve(src, 'components'),
+      containers: path.resolve(src, 'containers'),
       'redux/modules': path.resolve(src, 'redux-modules/modules'),
       utils: path.resolve(src, 'utils'),
 		},
@@ -63,12 +65,10 @@ const common = {
 
 const developeConfig = require('./webpack.conf.dev');
 const productionConfig = require('./webpack.conf.prod');
-
-if ( isDevelopment ) {
+if (isLint) {
+  module.exports = common;
+} else if ( isDevelopment ) {
 	module.exports = merge.smart(common, developeConfig);
-}else if ( isProduction ) {
+} else if ( isProduction ) {
 	module.exports = merge.smart(common, productionConfig);
-}else{
-	module.exports = common;
-	// throw Error(`\x1b[31m✖ ==> Our assembly have no ENV\x1b[0m like  ${process.env.NODE_ENV}`);
 }

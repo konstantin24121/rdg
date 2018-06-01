@@ -1,4 +1,5 @@
 {
+  "sourceMap": true,
   "presets": [
     ["@babel/preset-env", {
       "useBuiltIns": "usage",
@@ -7,9 +8,19 @@
       },
       "shippedProposals": true,
     }],
+    "@babel/preset-react",
     ["@babel/preset-stage-0", {
       "decoratorsLegacy": true,
       "loose": true,
     }],
   ],
+  "env": {
+    "development": {
+      "plugins": [
+        "react-hot-loader/babel",
+      ]
+    },
+    "production": {
+    },
+  }
 }
