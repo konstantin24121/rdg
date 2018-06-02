@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { historyPush } from './utils';
 
-class Link extends Component {
+class Link extends PureComponent {
   handleClick = (event) => {
     event.preventDefault();
     const { to } = this.props;

@@ -32,11 +32,12 @@ export const Header = styled.div`
   }
   & > *:nth-child(2) {
     flex-shrink: 0;
+    flex-basis: 190px;
   }
 `;
 
 export const Container = styled.div`
-  padding: 40px;
+  padding: 40px 40px 0 40px;
   flex: 1 0 auto;
 `;
 

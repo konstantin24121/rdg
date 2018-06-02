@@ -22,7 +22,7 @@ class Root extends Component {
                 path="dashboard"
                 render={() => (
                   <Route.Link to="new_deal">
-                    <Button isPrimary>New Deal</Button>
+                    <Button type="primary" isFlex>New Deal</Button>
                   </Route.Link>
                 )}
               />
@@ -30,7 +30,7 @@ class Root extends Component {
                 path="new_deal"
                 render={() => (
                   <Route.Link to="dashboard">
-                    <Button>Back</Button>
+                    <Button isFlex>Back</Button>
                   </Route.Link>
                 )}
               />

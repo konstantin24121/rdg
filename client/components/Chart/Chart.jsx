@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Root, Canvas } from './ChartStyled';
 
 const BORDER_OFFSET = 4;
 
-class Chart extends Component {
+class Chart extends PureComponent {
   constructor(props) {
     super(props);
     this.canvasRef = React.createRef();

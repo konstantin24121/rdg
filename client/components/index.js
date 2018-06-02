@@ -7,3 +7,5 @@ export { default as Title } from './Title';
 export { default as Text } from './Text';
 export { default as CurrentDate } from './CurrentDate';
 export { default as Badge } from './Badge';
+export { default as Table } from './Table';
+export { default as DealsChart } from './DealsChart';

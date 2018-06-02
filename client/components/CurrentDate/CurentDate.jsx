@@ -1,8 +1,8 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 
-class CurrentDate extends Component {
+class CurrentDate extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

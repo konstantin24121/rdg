@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { matchPath, register, unregister } from './utils';
 
-class Route extends Component {
+class Route extends PureComponent {
   componentWillMount() {
     register(this);
     window.addEventListener('popstate', this.handlePop);

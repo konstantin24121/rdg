@@ -24,4 +24,8 @@ export const applyGlobalStyles = () => injectGlobal`
              "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
              SimSun, sans-serif;
   }
+
+  a {
+    text-decoration: none;
+  }
 `;
