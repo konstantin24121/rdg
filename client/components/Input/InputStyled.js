@@ -1,19 +1,23 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const applyRootStyles = ({ theme }) => css`
+  font-size: ${theme.fontSizeLarge};
+  font-weight: ${theme.fontWeightBold};
+`;
 
 export const Root = styled.div`
   display: flex;
   align-items: stretch;
   height: 40px;
-  font-size: 18px;
-  font-weight: 700;
   position: relative;
+  ${applyRootStyles}
 `;
 
 export const Addon = styled.div`
-  background-color: #c5e3fd;
   padding: 0 25px;
   display: flex;
   align-items: center;
+  background-color: ${({ theme }) => theme.blue100};
 `;
 
 export const InputField = styled.input`
@@ -24,12 +28,17 @@ export const InputField = styled.input`
   flex-basis: 100%;
   font-size: inherit;
   font-weight: inherit;
+  font-family: ${({ theme }) => theme.fontFamily}
+`;
+
+const applyErrorStyles = ({ theme }) => css`
+  font-size: ${theme.fontSizeBase};
+  font-weight: ${theme.fontWeightRegular};
+  color: ${theme.red400};
 `;
 
 export const ErrorMessage = styled.div`
   position: absolute;
   bottom: -22px;
-  font-size: 14px;
-  font-weight: 400;
-  color: #d0021b;
+  ${applyErrorStyles}
 `;

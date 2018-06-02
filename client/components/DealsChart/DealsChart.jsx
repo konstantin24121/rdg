@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Chart } from 'components';
 
 const INTERVAL = 60;
-const XAcisCount = 5;
+const XAcisCount = 10;
 const YAcisCount = 5;
 
 class DealsChart extends Component {

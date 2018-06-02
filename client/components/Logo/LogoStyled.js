@@ -1,7 +1,16 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const applyRootStyles = ({ theme, isSecondary }) => css`
+  padding-left: ${theme.offset};
+  &::before {
+    background-color: ${isSecondary ? theme.gray300 : theme.blue500};
+  }
+  > svg path{
+    fill: ${isSecondary ? theme.gray400 : theme.gray800};
+  };
+`;
 
 export const Root = styled.div`
-  padding-left: 40px;
   position: relative;
   width: 270px;
   line-height: 1;
@@ -14,10 +23,7 @@ export const Root = styled.div`
     width: 25px;
     height: 25px;
     left: 0;
-    background-color: ${({ isSecondary }) => { return isSecondary ? '#d4d4d4' : '#4a90e2'; }};
   }
 
-  > svg path{
-    fill: ${({ isSecondary }) => { return isSecondary ? '#afafaf' : '#494949'; }};
-  };
+  ${applyRootStyles}
 `;

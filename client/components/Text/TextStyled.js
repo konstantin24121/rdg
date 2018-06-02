@@ -1,11 +1,11 @@
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
-const sizeMap = [12, 14, 16];
+const sizeMap = theme => [theme.fontSizeSmall, theme.fontSizeBase, theme.fontSizeBig];
 
-const applyTestStyles = ({ align, block, size }) => css`
+const applyTestStyles = ({ align, block, size, theme }) => css`
   display: ${block ? 'inline-block' : 'inline'};
-  font-size: ${sizeMap[size]}px;
+  font-size: ${sizeMap(theme)[size]};
   text-align: ${align};
 `;
 

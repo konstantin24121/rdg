@@ -27,5 +27,5 @@ export const LoaderBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(231, 241, 250, 0.84);;
+  background-color: ${({ theme }) => theme.gray150};
 `;

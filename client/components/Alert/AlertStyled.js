@@ -1,29 +1,32 @@
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
-const applyAlertType = ({ type }) => {
+const applyAlertType = ({ type, theme }) => {
   switch (type) {
     case 'info':
       return css`
-        background: #f4f4f4;
-        color: #6f6f6f;
+        background: ${theme.gray100};
+        color: ${theme.gray500};
       `;
     case 'success':
       return css`
-        border-radius: 3px;
-        border: 2px solid #00d0a2;
-        background-color: rgba(0, 208, 162, 0.09);
+        border-radius: ${theme.borderRadius};
+        border: 2px solid ${theme.green100};
+        background-color: rgba(0, 208, 162, 0.1);
       `;
     default:
       return css``;
   }
 };
 
-const applyAlertSize = ({ size }) => {
+const applyAlertSize = ({ size, theme }) => {
   switch (size) {
-    case 'small': return css`font-size: 14px; font-weight: 400;`;
-    case 'medium': return css`font-size: 16px; font-weight: 500;`;
-    default: return css`font-size: 18px; font-weight: 700;`;
+    case 'small':
+      return css`font-size: ${theme.fontSizeBase}; font-weight: ${theme.fontWeightRegular};`;
+    case 'medium':
+      return css`font-size: ${theme.fontSizeBig}; font-weight: 500;`;
+    default:
+      return css`font-size: ${theme.fontSizeLarge}; font-weight: ${theme.fontWeightBold};`;
   }
 };
 

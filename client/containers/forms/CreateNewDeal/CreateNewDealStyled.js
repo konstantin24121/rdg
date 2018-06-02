@@ -1,10 +1,14 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const applyRootStyles = ({ theme }) => css`
+  background-color: ${theme.gray200};
+  padding: ${theme.offset};
+`;
 
 export const Root = styled.div`
-  background-color: #e7f1fa;
-  padding: 40px;
   display: flex;
   flex-direction: column;
+  ${applyRootStyles}
 `;
 
 export const BtnBox = styled.div`

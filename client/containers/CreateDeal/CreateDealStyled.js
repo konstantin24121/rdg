@@ -5,7 +5,7 @@ export const ConfirmedValue = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 0;
+  padding: ${({ theme }) => theme.offset} 0;
   line-height: 1;
   position: relative;
 
@@ -16,7 +16,7 @@ export const ConfirmedValue = styled.div`
 
 export const ConfirmedIcon = styled.div`
   position: absolute;
-  color: #00d0a2;
+  color: ${({ theme }) => theme.green100};
   left: -120px;
   height: 100%;
   display: flex;

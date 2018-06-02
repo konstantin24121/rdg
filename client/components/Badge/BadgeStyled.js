@@ -1,10 +1,14 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const applyBadgeStyled = ({ theme }) => css`
+  border-radius: ${theme.borderRadius};
+  background-color: ${theme.blue400};
+`;
 
 const Badge = styled.div`
-  border-radius: 3px;
-  background-color: #7ebaff;
   color: white;
   padding: 1px 12px;
+  ${applyBadgeStyled}
 `;
 
 export default Badge;

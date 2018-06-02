@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
-const applyTitleStyles = ({ thin, inline }) => css`
-  font-weight: ${thin ? 300 : 400};
+const applyTitleStyles = ({ thin, inline, theme }) => css`
+  font-weight: ${thin ? theme.fontWeightThin : theme.fontWeightRegular};
   display: ${inline ? 'inline-block' : 'block'};
 `;
 
@@ -12,27 +12,27 @@ const title = styled.div`
 `;
 
 export const H1 = title.withComponent('h1').extend`
-  font-size: 24px;
+  font-size: calc(${({ theme }) => theme.fontSizeLarge} + 6px);
 `;
 
 export const H2 = title.withComponent('h2').extend`
-  font-size: 22px;
+  font-size: calc(${({ theme }) => theme.fontSizeLarge} + 4px);
 `;
 
 export const H3 = title.withComponent('h3').extend`
-  font-size: 20px;
+  font-size: calc(${({ theme }) => theme.fontSizeLarge} + 2px);
 `;
 
 export const H4 = title.withComponent('h3').extend`
-  font-size: 18px;
+  font-size: ${({ theme }) => theme.fontSizeLarge};
 `;
 
 export const H5 = title.withComponent('h3').extend`
-  font-size: 16px;
+  font-size: ${({ theme }) => theme.fontSizeBig};
 `;
 
 export const H6 = title.withComponent('h3').extend`
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.fontSizeBase};
 `;
 
 export const Titles = {

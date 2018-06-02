@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Root = styled.div`
   position: relative;
@@ -11,41 +11,47 @@ export const Tbl = styled.table.attrs({
   width: 100%;
 `;
 
+const applyTdStyles = ({ theme }) => css`
+  &:first-child {
+    padding-left: ${theme.offsetMedium};
+  }
+  &:last-child {
+    padding-right: ${theme.offsetMedium};
+  }
+`;
+
 export const Td = styled.td`
   vertical-align: middle;
   line-height: 40px;
   height: 40px;
-
-  &:first-child {
-    padding-left: 20px;
-  }
-  &:last-child {
-    padding-right: 20px;
-  }
+  ${applyTdStyles}
 `;
 
 export const Th = Td.withComponent('th').extend`
   text-align: left;
 `;
 
-export const Row = styled.tr`
-  line-height: 40px;
-
+const applyRowStyles = ({ theme }) => css`
   &:nth-child(even) {
-    background-color: #e7f1fa;
+    background-color: ${theme.gray200};
   }
 
   &:nth-child(odd) {
-    background-color: #f5f9fd;
+    background-color: ${theme.gray150};
   }
+`;
 
+export const Row = styled.tr`
+  line-height: 40px;
+  ${applyRowStyles}
   &:first-child {
     background-color: transparent;
   }
 `;
+
 export const Pagination = styled.div`
   display: flex;
-  margin-top: 10px;
+  margin-top: ${({ theme }) => theme.offsetSmall};
   justify-content: flex-end;
   & > * {
     margin-right: 4px;
@@ -61,5 +67,5 @@ export const LoaderBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(231, 241, 250, 0.5);
+  background-color: ${({ theme }) => theme.gray150};
 `;

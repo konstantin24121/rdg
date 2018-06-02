@@ -7,11 +7,17 @@ export const Root = styled.div`
   height: 100%;
 `;
 
-export const Section = styled.div`
-  background: ${({ color }) => color};
-  flex: ${({ isGrow }) => { return isGrow ? 1 : 0; }} 0 auto;
+const applySectionStyles = ({ theme, color, isGrow }) => css`
+  background: ${color};
+  flex: ${isGrow ? 1 : 0} 0 auto;
   & > * {
-    max-width: 800px;
+    max-width: ${theme.container};
+  }
+`;
+
+export const Section = styled.div`
+  ${applySectionStyles}
+  & > * {
     margin: 0 auto;
   }
 `;
@@ -22,7 +28,7 @@ Section.defaultProps = {
 };
 
 export const Header = styled.div`
-  padding: 55px 40px;
+  padding: 55px ${({ theme }) => theme.offset};
   display: flex;
   flex: 0 0 auto;
   justify-content: space-around;
@@ -38,7 +44,8 @@ export const Header = styled.div`
 `;
 
 export const Container = styled.div`
-  padding: 40px 40px 0 40px;
+  padding: ${({ theme }) => theme.offset};
+  padding-bottom: 0;
   flex: 1 0 auto;
   width: 100%;
 `;
@@ -57,11 +64,11 @@ export const ContainerHeader = styled.div`
   }
 `;
 
-const applyIndentSize = ({ size }) => {
+const applyIndentSize = ({ size, theme }) => {
   switch (size) {
-    case 'small': return css`margin-bottom: 10px`;
-    case 'medium': return css`margin-bottom: 20px`;
-    default: return css`margin-bottom: 40px;`;
+    case 'small': return css`margin-bottom: ${theme.offsetSmall}`;
+    case 'medium': return css`margin-bottom: ${theme.offsetMedium}`;
+    default: return css`margin-bottom: ${theme.offset};`;
   }
 };
 
@@ -99,9 +106,9 @@ Align.defaultProps = {
   align: 'flex-start',
 };
 
+
 export const Footer = styled.div`
-  padding: 40px;
-  color: #494949;
+  padding: ${({ theme }) => theme.offset};
   display: flex;
   flex: 0 0 auto;
   justify-content: space-around;

@@ -1,11 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { withTheme } from 'styled-components';
 import Loader from 'components/icons/Loader';
 import { Root, Canvas, LoaderBox, TestLabel } from './ChartStyled';
-
-const BORDER_OFFSET = 4;
-const labelYOffset = 6;
-const labelXOffset = 4;
 
 class Chart extends Component {
   constructor(props) {
@@ -25,10 +22,11 @@ class Chart extends Component {
   }
 
   drawBorder = ({ ctx, width, height }) => {
-    ctx.strokeStyle = '#7a7a7a';
+    const { theme } = this.props;
+    ctx.strokeStyle = theme.gray500;
     ctx.lineWidth = 1;
     ctx.strokeRect(
-      BORDER_OFFSET - 0.5,
+      theme.chartOffset - 0.5,
       0.5,
       width,
       height - 1,
@@ -36,14 +34,14 @@ class Chart extends Component {
   }
 
   drawLinesAndLabels = ({ ctx, width, height }) => {
-    const { xKeys, yKeys } = this.props;
-    const realWidth = width + BORDER_OFFSET;
-    const yAxisLabelLine = realWidth + labelYOffset;
-    const xAxisLabelLine = height + labelXOffset;
+    const { xKeys, yKeys, theme } = this.props;
+    const realWidth = width + theme.chartOffset;
+    const yAxisLabelLine = realWidth + theme.chartYAxisOffset;
+    const xAxisLabelLine = height + theme.chartXAxisOffset;
     const xNumber = xKeys.length - 1;
     const yNumber = yKeys.length - 1;
     ctx.lineWidth = 1;
-    ctx.strokeStyle = '#cccccc';
+    ctx.strokeStyle = theme.gray300;
     const verticalStep = Math.round(width / xNumber);
     const horizontalStep = Math.round(height / yNumber);
     if (yKeys.length) {
@@ -51,7 +49,7 @@ class Chart extends Component {
       ctx.textBaseline = 'middle';
       for (let i = 1; i < yNumber; i += 1) {
         ctx.beginPath();
-        ctx.moveTo(BORDER_OFFSET, (horizontalStep * i) - 0.5);
+        ctx.moveTo(theme.chartOffset, (horizontalStep * i) - 0.5);
         ctx.lineTo(realWidth, (horizontalStep * i) - 0.5);
         ctx.stroke();
         ctx.fillText(yKeys[i].label, yAxisLabelLine, (horizontalStep * i) - 0.5);
@@ -61,7 +59,7 @@ class Chart extends Component {
     }
     if (xKeys.length) {
       ctx.textBaseline = 'top';
-      ctx.fillText(xKeys[0].label, BORDER_OFFSET, xAxisLabelLine);
+      ctx.fillText(xKeys[0].label, theme.chartOffset, xAxisLabelLine);
       ctx.textAlign = 'center';
       for (let i = 1; i < xNumber; i += 1) {
         ctx.beginPath();
@@ -76,14 +74,14 @@ class Chart extends Component {
   }
 
   drawLine = ({ ctx, width, height }) => {
-    const { xKeys, yKeys, data, dataKeyX, dataKeyY } = this.props;
+    const { xKeys, yKeys, data, dataKeyX, dataKeyY, theme } = this.props;
     if (!data.length) return null;
 
     const xStep = (xKeys[xKeys.length - 1].value - xKeys[0].value) / width;
     const yStep = (yKeys[yKeys.length - 1].value - yKeys[0].value) / height;
 
     ctx.fillStyle = 'black';
-    ctx.strokeStyle = '#4a90e2';
+    ctx.strokeStyle = theme.blue500;
     ctx.lineWidth = 4;
     for (let i = 0; i < data.length; i += 1) {
       const point = data[i];
@@ -97,8 +95,8 @@ class Chart extends Component {
         const nextY = (nextPoint[dataKeyY] - yKeys[0].value) / yStep;
         let realX = nextX;
         let realY = nextY;
-        if (nextX < BORDER_OFFSET) {
-          realX = BORDER_OFFSET;
+        if (nextX < theme.chartOffset) {
+          realX = theme.chartOffset;
           const a = (nextY - y) / (nextX - x);
           realY = nextY - (a * nextX);
         }
@@ -115,18 +113,19 @@ class Chart extends Component {
   };
 
   updateCanvas() {
+    const { theme } = this.props;
     const canvas = this.canvasRef.current;
     canvas.width = this.rootRef.current.getClientRects()[0].width;
     canvas.height = this.props.chartHeight;
     const labelWidth = this.labelYCheckRef.current ? this.labelYCheckRef.current.clientWidth : 0;
     const labelHeight = this.labelXCheckRef.current ? this.labelXCheckRef.current.clientHeight : 0;
     const { width: canvasWidth, height: canvasHeight } = canvas;
-    const chartWidth = canvasWidth - (BORDER_OFFSET * 2) - labelWidth - labelYOffset;
-    const realHeight = canvasHeight - labelHeight - labelXOffset;
+    const chartWidth = canvasWidth - (theme.chartOffset * 2) - labelWidth - theme.chartYAxisOffset;
+    const realHeight = canvasHeight - labelHeight - theme.chartXAxisOffset;
 
     const ctx = this.canvasRef.current.getContext('2d');
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    ctx.font = '14px Helvetica';
+    ctx.font = `${theme.fontSizeBase} ${theme.fontFamily}`;
 
     this.drawLinesAndLabels({
       ctx,
@@ -194,6 +193,7 @@ Chart.propTypes = {
   data: dataShape.isRequired,
   chartHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isLoading: PropTypes.bool,
+  theme: PropTypes.object,
 };
 
 Chart.defaultProps = {
@@ -201,4 +201,4 @@ Chart.defaultProps = {
   isLoading: false,
 };
 
-export default Chart;
+export default withTheme(Chart);
