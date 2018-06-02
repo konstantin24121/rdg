@@ -35,9 +35,9 @@ const applyBtnSize = ({ size }) => {
   }
 };
 
-const applyBtnStyles = ({ isFlex, isActive, isDisable }) => css`
+const applyBtnStyles = ({ isFlex, isActive, isDisable, width }) => css`
   opacity: ${isActive ? 0.8 : 1};
-  width: ${isFlex ? '100%' : 'auto'};
+  width: ${isFlex ? '100%' : width};
   &:hover {
     cursor: ${isDisable ? 'default' : 'pointer'};
   }

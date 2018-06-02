@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import CreateDeal from 'containers/CreateDeal';
-import Dashboard from 'containers/Dashboard';
+import { CreateDeal, Dashboard } from 'containers';
 import { Layout, Logo, Button, Text, Route } from 'components';
 import { applyGlobalStyles } from './globalStyled';
 
@@ -19,9 +18,9 @@ class Root extends Component {
             </div>
             <div>
               <Route
-                path="dashboard"
+                path="/"
                 render={() => (
-                  <Route.Link to="new_deal">
+                  <Route.Link to="#new_deal">
                     <Button type="primary" isFlex>New Deal</Button>
                   </Route.Link>
                 )}
@@ -29,7 +28,7 @@ class Root extends Component {
               <Route
                 path="new_deal"
                 render={() => (
-                  <Route.Link to="dashboard">
+                  <Route.Link to="/">
                     <Button isFlex>Back</Button>
                   </Route.Link>
                 )}
@@ -40,7 +39,7 @@ class Root extends Component {
         <Layout.Section color="white" isGrow>
           <Layout.Container key="container">
             <Route
-              path="dashboard"
+              path="/"
               component={Dashboard}
             />
             <Route

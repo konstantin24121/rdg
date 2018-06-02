@@ -14,6 +14,9 @@
       "loose": true,
     }],
   ],
+  "plugins": [
+    ["babel-plugin-styled-components"],
+  ],
   "env": {
     "development": {
       "plugins": [

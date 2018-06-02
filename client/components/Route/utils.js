@@ -10,6 +10,12 @@ export const historyPush = (path) => {
 
 export const matchPath = (pathname, options) => {
   const { path } = options;
+  if (path === '/' && !pathname) {
+    return {
+      path,
+      url: '/',
+    };
+  }
   const match = new RegExp(`^#${path}`).exec(pathname);
   if (!match) {
     // There wasn't a match.

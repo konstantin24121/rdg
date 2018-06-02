@@ -7,7 +7,7 @@ class Link extends PureComponent {
   handleClick = (event) => {
     event.preventDefault();
     const { to } = this.props;
-    historyPush(`#${to}`);
+    historyPush(to);
   }
   render() {
     const { to, children } = this.props;

@@ -4,20 +4,24 @@ import PropTypes from 'prop-types';
 import { Btn } from './ButtonStyled';
 
 const Button = ({ children, ...props }) => (
-  <Btn {...props}>{children}</Btn>
+  <Btn {...props}>
+    {children}
+  </Btn>
 );
 
 Button.propTypes = {
   children: PropTypes.node.isRequired,
+  width: PropTypes.string,
   type: PropTypes.oneOf(['default', 'primary', 'link']),
   size: PropTypes.oneOf(['medium', 'small']),
-  isFlex: PropTypes.oneOf(['default', 'primary', 'link']),
-  isActive: PropTypes.oneOf(['default', 'primary', 'link']),
-  isDisable: PropTypes.oneOf(['default', 'primary', 'link']),
+  isFlex: PropTypes.bool,
+  isActive: PropTypes.bool,
+  isDisable: PropTypes.bool,
 };
 
 Button.defaultProps = {
   type: 'default',
+  width: 'auto',
   size: 'medium',
   isFlex: false,
   isActive: false,
