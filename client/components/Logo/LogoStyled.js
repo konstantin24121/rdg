@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 const applyRootStyles = ({ theme, isSecondary }) => css`
   padding-left: ${theme.offset};
+
   &::before {
     background-color: ${isSecondary ? theme.gray300 : theme.blue500};
   }
@@ -12,8 +13,8 @@ const applyRootStyles = ({ theme, isSecondary }) => css`
 
 export const Root = styled.div`
   position: relative;
-  width: 270px;
   line-height: 1;
+  width: 270px;
 
   &::before {
     content: '';

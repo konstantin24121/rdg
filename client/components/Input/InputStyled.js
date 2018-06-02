@@ -26,6 +26,7 @@ export const InputField = styled.input`
   background-color: white;
   padding: 0 25px;
   flex-basis: 100%;
+  width: 100%;
   font-size: inherit;
   font-weight: inherit;
   font-family: ${({ theme }) => theme.fontFamily}

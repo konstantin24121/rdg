@@ -8,6 +8,7 @@ export const Root = styled.div`
 
 export const Canvas = styled.canvas`
   flex-basis: 100%;
+  max-width: 100%;
 `;
 
 export const TestLabel = styled.div`

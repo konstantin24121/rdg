@@ -16,6 +16,7 @@
   ],
   "plugins": [
     ["babel-plugin-styled-components"],
+    ["babel-plugin-lodash"],
   ],
   "env": {
     "development": {

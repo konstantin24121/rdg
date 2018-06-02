@@ -41,7 +41,7 @@ class CreateDeal extends Component {
             <ConfirmedValue>
               <div>
                 <ConfirmedIcon>
-                  <Loader width="90px" isSuccess={isSaved} />
+                  <Loader width="100%" isSuccess={isSaved} />
                 </ConfirmedIcon>
                 USD {value.toFixed(2)}
               </div>

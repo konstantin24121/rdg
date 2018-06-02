@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'components';
+import { Button, Layout } from 'components';
 import Loader from 'components/icons/Loader';
 import { Root, Tbl, Td, Row, Th, Pagination, LoaderBox } from './TableStyled';
 
@@ -128,13 +128,15 @@ class Table extends PureComponent {
             <Loader width="50px" />
           </LoaderBox>
         )}
-        <Tbl>
-          <tbody>
-            {this.renderHeader()}
-            {data.length && this.renderRows()}
-            {!data.length && this.renderEmpty()}
-          </tbody>
-        </Tbl>
+        <Layout.ScrolableContainer>
+          <Tbl>
+            <tbody>
+              {this.renderHeader()}
+              {!!data.length && this.renderRows()}
+              {!data.length && this.renderEmpty()}
+            </tbody>
+          </Tbl>
+        </Layout.ScrolableContainer>
         {isPaginationShow && this.renderPagination()}
       </Root>
     );

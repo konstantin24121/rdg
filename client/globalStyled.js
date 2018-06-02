@@ -15,11 +15,17 @@ export const theme = {
   blue800: '#0f3868',
   red400: '#d0021b',
 
+  screenTiny: '500px',
+  screenSmall: '768px',
+  screenMedium: '992px',
+
+  containerSmall: '100%',
+  containerMedium: '700px',
   container: '800px',
 
-  offset: '40px',
-  offsetMedium: '20px',
   offsetSmall: '10px',
+  offsetMedium: '20px',
+  offset: '40px',
 
   borderRadius: '3px',
 

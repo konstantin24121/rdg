@@ -68,6 +68,9 @@ class CreateNewDeal extends PureComponent {
           <Layout.Indent>
             <Input
               addon={() => 'USD'}
+              type="number"
+              min="0.01"
+              step="0.01"
               inputRef={this.inputRef}
               onFocus={this.handleClearError}
               meta={{

@@ -1,7 +1,20 @@
 import styled, { css } from 'styled-components';
 
+const applyConfirmValueStyles = ({ theme }) => css`
+  font-size: 22px;
+  padding: ${theme.offsetMedium} 0;
+
+  @media (min-width: ${theme.screenTiny}) {
+    font-size: 52px;
+  }
+
+  @media (min-width: ${theme.screenMedium}) {
+    font-size: 72px;
+    padding: ${theme.offset} 0;
+  }
+`;
+
 export const ConfirmedValue = styled.div`
-  font-size: 72px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,15 +25,32 @@ export const ConfirmedValue = styled.div`
   & > * {
     position: relative;
   }
+
+  ${applyConfirmValueStyles}
+`;
+
+const applyConfirmedIconStyles = ({ theme }) => css`
+  width: 30px;
+  left: -40px;
+
+  @media (min-width: ${theme.screenTiny}) {
+    width: 60px;
+    left: -80px;
+  }
+
+  @media (min-width: ${theme.screenMedium}) {
+    width: 90px;
+    left: -120px;
+  }
 `;
 
 export const ConfirmedIcon = styled.div`
   position: absolute;
   color: ${({ theme }) => theme.green100};
-  left: -120px;
   height: 100%;
   display: flex;
   align-items: center;
+  ${applyConfirmedIconStyles}
 `;
 
 const applyFadeInStyles = ({ isShow }) => css`
