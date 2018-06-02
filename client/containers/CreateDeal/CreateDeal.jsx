@@ -4,9 +4,10 @@ import CreateNewDealForm from 'containers/forms/CreateNewDeal'
 import {
   Title, Layout, Text,
   CurrentDate, Button, Alert,
+  Route,
 } from 'components';
 
-import Loader from 'components/icons/loader.svg';
+import Loader from 'components/icons/Loader';
 
 import { ConfirmedValue, FadeIn } from './CreateDealStyled';
 
@@ -22,8 +23,15 @@ class CreateDeal extends Component {
 
   handleCreate = ({ value }) => {
     this.setState({
-      confirmedValue: parseInt(value, 10),
+      confirmedValue: parseFloat(value, 10),
       isLoading: true,
+    }, () => {
+      setTimeout(() => {
+        this.setState({
+          isSuccess: true,
+          isLoading: false,
+        });
+      }, 2000);
     });
   }
 
@@ -34,7 +42,7 @@ class CreateDeal extends Component {
         <Layout.Indent>
           <Alert type="success">
             <ConfirmedValue>
-              <div><Loader width="90px" /></div>
+              <div><Loader width="90px" isSuccess={isSuccess} /></div>
               <div>USD {confirmedValue.toFixed(2)}</div>
             </ConfirmedValue>
           </Alert>
@@ -42,7 +50,9 @@ class CreateDeal extends Component {
         <Layout.Indent>
           <Layout.Align justify="center">
             <FadeIn isShow={isSuccess}>
-              <Button type="primary" width="180px">OK</Button>
+              <Route.Link to="/">
+                <Button type="primary" width="180px">OK</Button>
+              </Route.Link>
             </FadeIn>
           </Layout.Align>
         </Layout.Indent>
