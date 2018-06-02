@@ -12,7 +12,7 @@ class Link extends PureComponent {
   render() {
     const { to, children } = this.props;
     return (
-      <a href={`#${to}`} onClick={this.handleClick}>
+      <a href={`#${to}`} tabIndex="-1" onClick={this.handleClick}>
         {children}
       </a>
     );

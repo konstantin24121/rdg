@@ -1,23 +1,31 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Chart } from 'components';
 
 const INTERVAL = 60;
-const XAcisCount = 10;
+const XAcisCount = 5;
 const YAcisCount = 5;
 
-class DealsChart extends PureComponent {
+class DealsChart extends Component {
   constructor(props) {
     super(props);
     this.timer = null;
   }
 
+  getSortedData = () => {
+    const { data } = this.props;
+    return data.sort((a, b) => b.date - a.date);
+  }
+
   getData = () => {
-    const { data, dataKeyX } = this.props;
+    const { dataKeyX, isDataLoading } = this.props;
+    const data = this.getSortedData();
+    if (isDataLoading) return [];
     const now = Date.now();
-    const lastVisibleIdx = data.findIndex(
+    let lastVisibleIdx = data.findIndex(
       item => item[dataKeyX] < now - (INTERVAL * XAcisCount * 1000),
     );
+    if (lastVisibleIdx === -1) lastVisibleIdx = data.length - 1;
     return data.slice(0, lastVisibleIdx + 1);
   }
 
@@ -38,21 +46,32 @@ class DealsChart extends PureComponent {
   }
 
   getYKeys = ({ data }) => {
-    const { dataKeyY } = this.props;
-    const { min, max } = data.reduce(
-      (prev, current) => ({
-        min: prev.min > current[dataKeyY] ? current[dataKeyY] : prev.min,
-        max: prev.max < current[dataKeyY] ? current[dataKeyY] : prev.max,
-      }),
-      { min: data[0][dataKeyY], max: data[0][dataKeyY] },
-    );
-    const interval = (max - min) / YAcisCount;
-    const realMax = max + (interval / 2);
-    const realMin = min - (interval / 2);
-    const realInterval = (realMax - realMin) / YAcisCount;
+    const { dataKeyY, isDataLoading } = this.props;
+    let min;
+    let max;
+    if (isDataLoading || data.length === 0) {
+      min = 0;
+      max = YAcisCount;
+    } else {
+      const dimentions = data.reduce(
+        (prev, current) => ({
+          min: prev.min > current[dataKeyY] ? current[dataKeyY] : prev.min,
+          max: prev.max < current[dataKeyY] ? current[dataKeyY] : prev.max,
+        }),
+        { min: data[0][dataKeyY], max: data[0][dataKeyY] },
+      );
+      min = dimentions.min;
+      max = dimentions.max;
+      if (min === max) max = min + YAcisCount;
+      const interval = (max - min) / YAcisCount;
+      max += interval / 2;
+      min -= interval / 2;
+      if (min < 0) min = 0;
+    }
+    const realInterval = (max - min) / YAcisCount;
     const keys = [];
     for (let i = 0; i <= YAcisCount; i += 1) {
-      const value = realMin + (realInterval * i);
+      const value = min + (realInterval * i);
       keys.unshift({
         value,
         label: value.toFixed(2),
@@ -70,6 +89,7 @@ class DealsChart extends PureComponent {
   }
 
   render() {
+    const { isDataLoading } = this.props;
     const filteredData = this.getData();
     return (
       <Chart
@@ -77,6 +97,7 @@ class DealsChart extends PureComponent {
         xKeys={this.getXKeys()}
         yKeys={this.getYKeys({ data: filteredData })}
         data={filteredData}
+        isLoading={isDataLoading}
       />
     );
   }
@@ -92,6 +113,11 @@ DealsChart.propTypes = {
   ).isRequired,
   dataKeyX: PropTypes.string.isRequired,
   dataKeyY: PropTypes.string.isRequired,
+  isDataLoading: PropTypes.bool,
+};
+
+DealsChart.defaultProps = {
+  isDataLoading: false,
 };
 
 export default DealsChart;

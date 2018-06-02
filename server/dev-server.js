@@ -5,6 +5,15 @@ const hotMiddleware = require('webpack-hot-middleware');
 const webpackConfig = require('../implements/webpack.config');
 
 module.exports = function makeDevServer(app) {
+  // Delay for API requests
+  app.use((req, res, next) => {
+    if (/^\/api/.test(req.originalUrl)) {
+      setTimeout(next, 1000);
+    } else {
+      next();
+    }
+  });
+
   const compiler = webpack(webpackConfig);
 
   app.use(devMiddleware(compiler, {
@@ -18,6 +27,7 @@ module.exports = function makeDevServer(app) {
   }));
 
   app.use(hotMiddleware(compiler));
+
 
   app.get('/', (req, res, next) => {
     const filename = path.join(compiler.outputPath, 'index.html');

@@ -27,7 +27,7 @@ module.exports = function createApi(app, db) {
   // Create new Deal
   app.post('/api/deals', (req, res) => {
     const { value, date } = req.body;
-    if (!Number.isInteger(value)) {
+    if (Number(value) !== value) {
       res.send(ApiError('validation_error', 'Value must be a number'));
     }
     if (!Number.isInteger(date)) {

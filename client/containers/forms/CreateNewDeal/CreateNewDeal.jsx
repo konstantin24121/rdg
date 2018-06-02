@@ -17,18 +17,23 @@ class CreateNewDeal extends PureComponent {
     };
   }
 
+  componentDidMount() {
+    this.inputRef.current.focus();
+  }
+
   validate = (value) => {
     if (parseInt(value, 10) === 0) return 'Please enter value. Value can not be empty or zero';
     if (Number.isNaN(+value)) return 'Please enter valid value. Value can be only a number';
     return null;
   }
 
-  handleClick = () => {
+  handleSubmit = (event) => {
+    event.preventDefault();
     const value = +(this.inputRef.current.value);
     const fixedValue = value.toFixed(2);
     const validate = this.validate(fixedValue);
     if (!validate) {
-      this.props.onSubmit({ value: fixedValue });
+      this.props.onSubmit({ value: parseFloat(fixedValue), date: Date.now() });
     } else {
       this.setState({
         hasError: true,
@@ -59,20 +64,22 @@ class CreateNewDeal extends PureComponent {
         <Layout.Indent size="small">
           <Text>Value</Text>
         </Layout.Indent>
-        <Layout.Indent>
-          <Input
-            addon={() => 'USD'}
-            inputRef={this.inputRef}
-            onFocus={this.handleClearError}
-            meta={{
-              error: hasError,
-              errorMessage,
-            }}
-          />
-        </Layout.Indent>
-        <BtnBox>
-          <Button isFlex type="primary" onClick={this.handleClick}>New Deal</Button>
-        </BtnBox>
+        <form action="#" onSubmit={this.handleSubmit}>
+          <Layout.Indent>
+            <Input
+              addon={() => 'USD'}
+              inputRef={this.inputRef}
+              onFocus={this.handleClearError}
+              meta={{
+                error: hasError,
+                errorMessage,
+              }}
+            />
+          </Layout.Indent>
+          <BtnBox>
+            <Button isFlex type="primary" htmlType="submit">New Deal</Button>
+          </BtnBox>
+        </form>
       </Root>
     );
   }

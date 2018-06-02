@@ -7,19 +7,20 @@ export const ConfirmedValue = styled.div`
   justify-content: center;
   padding: 40px 0;
   line-height: 1;
+  position: relative;
 
-  & > *:nth-child(1) {
-    display: flex;
-    align-items: center;
-    margin-right: 20px;
-    color: #00d0a2;
+  & > * {
+    position: relative;
   }
+`;
 
-  & > *:nth-child(2) {
-    display: flex;
-    align-items: center;
-    margin-right: 110px;
-  }
+export const ConfirmedIcon = styled.div`
+  position: absolute;
+  color: #00d0a2;
+  left: -120px;
+  height: 100%;
+  display: flex;
+  align-items: center;
 `;
 
 const applyFadeInStyles = ({ isShow }) => css`

@@ -1,21 +1,29 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { format } from 'date-fns';
 import getPluralForm from 'utils/getPluralForm';
+import { ACTIONS as dealsActions, SELECTORS as dealSelectors } from 'redux/modules/deals';
 import {
   DealsChart, Title, Layout,
   Text, CurrentDate, Badge,
   Table, Button,
 } from 'components';
+
 import CrossIcon from 'components/icons/cross.svg';
+import LoaderIcon from 'components/icons/loader.svg';
 
 class Dashboard extends Component {
-  handleRemoveDeal = dealId => () => {
-    console.log(dealId);
-  };
+  componentWillMount() {
+    this.props.getDealsList();
+  }
+
+  handleRemoveDeal = id => () => {
+    this.props.removeDeal({ id });
+  }
 
   renderTable() {
-    const { data } = this.props;
+    const { deals, isLoading, isLoaded } = this.props;
     return (
       <Table
         cols={[
@@ -38,22 +46,24 @@ class Dashboard extends Component {
           {
             key: 'id',
             width: '20px',
-            render: ({ value }) => (
-              <Button type="link" onClick={this.handleRemoveDeal(value)}>
-                <CrossIcon width="14" />
+            render: ({ value, item }) => (
+              <Button type="link" onClick={this.handleRemoveDeal(value)} disabled={item.isRemoving}>
+                {item.isRemoving && <LoaderIcon width="14" />}
+                {!item.isRemoving && <CrossIcon width="14" />}
               </Button>
             ),
           },
         ]}
-        data={data}
+        isLoading={isLoading || !isLoaded}
+        data={deals}
         pageSize={5}
       />
     );
   }
 
   render() {
-    const { data } = this.props;
-    const dealsNumber = data.length;
+    const { deals, isLoading, isLoaded } = this.props;
+    const dealsNumber = deals.length;
     return (
       <Fragment>
         <Layout.Indent>
@@ -75,7 +85,8 @@ class Dashboard extends Component {
             chartHeight={400}
             dataKeyX="date"
             dataKeyY="value"
-            data={data}
+            data={deals}
+            isDataLoading={isLoading || !isLoaded}
           />
         </Layout.Indent>
         <Layout.Indent>
@@ -86,9 +97,11 @@ class Dashboard extends Component {
               </Title>
             </div>
             <div>
-              <Badge>
-                Total: {dealsNumber} {getPluralForm(dealsNumber, ['deal', 'deals', 'deals'])}
-              </Badge>
+              {isLoaded && (
+                <Badge>
+                  Total: {dealsNumber} {getPluralForm(dealsNumber, ['deal', 'deals', 'deals'])}
+                </Badge>
+              )}
             </div>
           </Layout.ContainerHeader>
         </Layout.Indent>
@@ -101,57 +114,22 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
-  data: PropTypes.array,
+  deals: PropTypes.array,
+  isLoading: PropTypes.bool.isRequired,
+  isLoaded: PropTypes.bool.isRequired,
+  getDealsList: PropTypes.func.isRequired,
+  removeDeal: PropTypes.func.isRequired,
 };
 
-Dashboard.defaultProps = {
-  data: [
-    {
-      id: 20,
-      date: Date.now() - 100,
-      value: 15,
-    },
-    {
-      id: 18,
-      date: Date.now() - 600,
-      value: 5,
-    },
-    {
-      id: 17,
-      date: Date.now() - 9500,
-      value: 33,
-    },
-    {
-      id: 16,
-      date: Date.now() - 10000,
-      value: 45,
-    },
-    {
-      id: 15,
-      date: Date.now() - 60000,
-      value: 25,
-    },
-    {
-      id: 14,
-      date: Date.now() - 125000,
-      value: 12.5,
-    },
-    {
-      id: 13,
-      date: Date.now() - 300000,
-      value: 30,
-    },
-    {
-      id: 12,
-      date: Date.now() - 560000,
-      value: 10,
-    },
-    {
-      id: 10,
-      date: Date.now() - 640000,
-      value: 22,
-    },
-  ],
+const mapStateToProps = state => ({
+  deals: dealSelectors.getDeals(state),
+  isLoading: state.deals.isLoading,
+  isLoaded: state.deals.isLoaded,
+});
+
+const actions = {
+  getDealsList: dealsActions.getList,
+  removeDeal: dealsActions.removeDeal,
 };
 
-export default Dashboard;
+export default connect(mapStateToProps, actions)(Dashboard);

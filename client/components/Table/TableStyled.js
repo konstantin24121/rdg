@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const Root = styled.table.attrs({
+export const Root = styled.div`
+  position: relative;
+`;
+
+export const Tbl = styled.table.attrs({
   cellPadding: 20,
   cellSpacing: 0,
 })`
@@ -8,7 +12,10 @@ export const Root = styled.table.attrs({
 `;
 
 export const Td = styled.td`
-  vertical-align: center;
+  vertical-align: middle;
+  line-height: 40px;
+  height: 40px;
+
   &:first-child {
     padding-left: 20px;
   }
@@ -19,7 +26,6 @@ export const Td = styled.td`
 
 export const Th = Td.withComponent('th').extend`
   text-align: left;
-  line-height: 40px;
 `;
 
 export const Row = styled.tr`
@@ -44,4 +50,16 @@ export const Pagination = styled.div`
   & > * {
     margin-right: 4px;
   }
+`;
+
+export const LoaderBox = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(231, 241, 250, 0.5);
 `;

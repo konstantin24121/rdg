@@ -25,8 +25,14 @@ low(adapter).then((db) => {
   // https://github.com/typicode/lodash-id
   // eslint-disable-next-line no-param-reassign
   db._.createId = function createId(collection) {
-    return this.last(collection).id + 1 || 0;
+    const last = this.last(collection);
+    return last ? last.id + 1 : 0;
   };
+  if (isDevelopment) {
+    makeDevServer(app);
+  } else {
+    makeProdServer(app);
+  }
   createApi(app, db);
 
   // Set db default values
@@ -34,12 +40,6 @@ low(adapter).then((db) => {
     deals: [],
   }).write();
 }).then(() => {
-  if (isDevelopment) {
-    makeDevServer(app);
-  } else {
-    makeProdServer(app);
-  }
-
   http.createServer(app).listen(app.get('port'), (err) => {
     if (err) {
       return console.error(err);

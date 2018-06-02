@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import CreateNewDealForm from 'containers/forms/CreateNewDeal'
+import { connect } from 'react-redux';
+import { ACTIONS as dealsActions, SELECTORS as dealSelectors } from 'redux/modules/deals';
+import CreateNewDealForm from 'containers/forms/CreateNewDeal';
 import {
   Title, Layout, Text,
   CurrentDate, Button, Alert,
@@ -9,47 +11,46 @@ import {
 
 import Loader from 'components/icons/Loader';
 
-import { ConfirmedValue, FadeIn } from './CreateDealStyled';
+import { ConfirmedValue, FadeIn, ConfirmedIcon } from './CreateDealStyled';
 
 class CreateDeal extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: false,
-      isSuccess: false,
-      confirmedValue: null,
-    };
+  getTitle = () => {
+    const { newDeal } = this.props;
+    const { isSaving, isSaved } = newDeal;
+    if (!isSaving && !isSaved) return 'New Deal';
+    if (isSaving) return 'Wait, we create your deal..';
+    if (isSaved) return 'Your deal confirmed!';
+    return 'Your deal not confirmed :(';
   }
 
-  handleCreate = ({ value }) => {
-    this.setState({
-      confirmedValue: parseFloat(value, 10),
-      isLoading: true,
-    }, () => {
-      setTimeout(() => {
-        this.setState({
-          isSuccess: true,
-          isLoading: false,
-        });
-      }, 2000);
-    });
+  componentWillUnmount() {
+    this.props.clearNewDeal();
+  }
+
+  handleCreate = ({ value, date }) => {
+    this.props.createDeal({ value, date });
   }
 
   renderFeedbackBoard = () => {
-    const { confirmedValue, isSuccess } = this.state;
+    const { newDeal } = this.props;
+    const { isSaved, value } = newDeal;
     return (
       <Fragment>
         <Layout.Indent>
           <Alert type="success">
             <ConfirmedValue>
-              <div><Loader width="90px" isSuccess={isSuccess} /></div>
-              <div>USD {confirmedValue.toFixed(2)}</div>
+              <div>
+                <ConfirmedIcon>
+                  <Loader width="90px" isSuccess={isSaved} />
+                </ConfirmedIcon>
+                USD {value.toFixed(2)}
+              </div>
             </ConfirmedValue>
           </Alert>
         </Layout.Indent>
         <Layout.Indent>
           <Layout.Align justify="center">
-            <FadeIn isShow={isSuccess}>
+            <FadeIn isShow={isSaved}>
               <Route.Link to="/">
                 <Button type="primary" width="180px">OK</Button>
               </Route.Link>
@@ -61,16 +62,15 @@ class CreateDeal extends Component {
   }
 
   render() {
-    const { isLoading, isSuccess } = this.state;
+    const { newDeal } = this.props;
+    const { isSaving, isSaved } = newDeal;
     return (
       <Fragment>
         <Layout.Indent>
           <Layout.ContainerHeader>
             <div>
               <Title thin>
-                {!isLoading && !isSuccess && 'New Deal'}
-                {isLoading && 'Wait, we create your deal..'}
-                {isSuccess && 'Your deal confirmed!'}
+                {this.getTitle()}
               </Title>
             </div>
             <div>
@@ -81,12 +81,27 @@ class CreateDeal extends Component {
           </Layout.ContainerHeader>
         </Layout.Indent>
         <Layout.Indent>
-          {!isLoading && !isSuccess && <CreateNewDealForm onSubmit={this.handleCreate} />}
-          {(isLoading || isSuccess) && this.renderFeedbackBoard()}
+          {!isSaving && !isSaved && <CreateNewDealForm onSubmit={this.handleCreate} />}
+          {(isSaving || isSaved) && this.renderFeedbackBoard()}
         </Layout.Indent>
       </Fragment>
     );
   }
 }
 
-export default CreateDeal;
+CreateDeal.propTypes = {
+  createDeal: PropTypes.func.isRequired,
+  clearNewDeal: PropTypes.func.isRequired,
+  newDeal: PropTypes.object,
+};
+
+const actions = {
+  createDeal: dealsActions.createDeal,
+  clearNewDeal: dealsActions.clearNewDeal,
+};
+
+const mapStateToProps = state => ({
+  newDeal: dealSelectors.getNewDeal(state),
+});
+
+export default connect(mapStateToProps, actions)(CreateDeal);

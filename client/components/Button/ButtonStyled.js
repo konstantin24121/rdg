@@ -5,6 +5,10 @@ const applyBtnType = ({ type }) => {
     case 'primary':
       return css`
         background-color: #4a90e2;
+
+        &:focus {
+          outline-color: #0f3868;
+        }
       `;
     case 'link':
       return css`
@@ -35,15 +39,15 @@ const applyBtnSize = ({ size }) => {
   }
 };
 
-const applyBtnStyles = ({ isFlex, isActive, isDisable, width }) => css`
+const applyBtnStyles = ({ isFlex, isActive, width, disabled }) => css`
   opacity: ${isActive ? 0.8 : 1};
   width: ${isFlex ? '100%' : width};
   &:hover {
-    cursor: ${isDisable ? 'default' : 'pointer'};
+    cursor: ${disabled ? 'default' : 'pointer'};
   }
 
   &:active {
-    opacity: ${isDisable ? 0.8 : 1};
+    opacity: ${disabled ? 0.8 : 1};
   }
 `;
 
