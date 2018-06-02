@@ -9,5 +9,6 @@ export { default as CurrentDate } from './CurrentDate';
 export { default as Badge } from './Badge';
 export { default as Table } from './Table';
 export { default as DealsChart } from './DealsChart';
+export { default as DealsTable } from './DealsTable';
 export { default as Alert } from './Alert';
 export { default as Input } from './Input';

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { format } from 'date-fns';
+
 import getPluralForm from 'utils/getPluralForm';
 import {
   ACTIONS as dealsActions,
@@ -10,58 +10,16 @@ import {
 import {
   DealsChart, Title, Layout,
   Text, CurrentDate, Badge,
-  Table, Button,
+  DealsTable,
 } from 'components';
-
-import CrossIcon from 'components/icons/cross.svg';
-import LoaderIcon from 'components/icons/loader.svg';
 
 class Dashboard extends Component {
   componentWillMount() {
     this.props.getDealsList();
   }
 
-  handleRemoveDeal = id => () => {
+  handleRemoveDeal = (id) => {
     this.props.removeDeal({ id });
-  }
-
-  renderTable() {
-    const { deals, isLoading, isLoaded } = this.props;
-    return (
-      <Table
-        cols={[
-          {
-            title: 'ID',
-            key: 'id',
-            width: '10%',
-          },
-          {
-            title: 'Date',
-            key: 'date',
-            width: '30%',
-            render: ({ value }) => (format(value, 'MMM d, YYYY HH:mm:ss')),
-          },
-          {
-            title: 'Value',
-            key: 'value',
-            render: ({ value }) => (value.toFixed(2)),
-          },
-          {
-            key: 'id',
-            width: '20px',
-            render: ({ value, item }) => (
-              <Button type="link" onClick={this.handleRemoveDeal(value)} disabled={item.isRemoving}>
-                {item.isRemoving && <LoaderIcon width="14" />}
-                {!item.isRemoving && <CrossIcon width="14" />}
-              </Button>
-            ),
-          },
-        ]}
-        isLoading={isLoading || !isLoaded}
-        data={deals}
-        pageSize={5}
-      />
-    );
   }
 
   render() {
@@ -108,7 +66,11 @@ class Dashboard extends Component {
           </Layout.ContainerHeader>
         </Layout.Indent>
         <Layout.Indent>
-          {this.renderTable()}
+          <DealsTable
+            data={deals}
+            isDataLoading={isLoading || !isLoaded}
+            onRemove={this.handleRemoveDeal}
+          />
         </Layout.Indent>
       </Fragment>
     );

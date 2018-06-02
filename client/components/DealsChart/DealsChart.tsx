@@ -3,9 +3,10 @@ import * as React from 'react';
 import { throttle } from 'lodash';
 import { Chart } from 'components';
 import { Root } from './DealsChartStyled';
+import { INTERFACES as dealsInterfaces } from 'redux/modules/deals';
 
 interface Props {
-  data: Deal[],
+  data: dealsInterfaces.Deal[],
   isDataLoading: boolean,
 };
 
@@ -14,12 +15,6 @@ interface State {
   xAxisCount: number,
   yAxisCount: number,
   interval: number,
-}
-
-interface Deal {
-  id: number,
-  date: Date,
-  value: number,
 }
 
 interface minMaxObject {
@@ -51,7 +46,7 @@ class DealsChart extends React.Component<Props, State> {
 
   getSortedData = () => {
     const { data } = this.props;
-    return data.sort((a: Deal, b: Deal) => b.date.getTime() - a.date.getTime());
+    return data.sort((a: dealsInterfaces.Deal, b: dealsInterfaces.Deal) => b.date.getTime() - a.date.getTime());
   }
 
   getData = () => {
@@ -61,7 +56,7 @@ class DealsChart extends React.Component<Props, State> {
     if (isDataLoading || !isMounted) return [];
     const now = Date.now();
     let lastVisibleIdx = data.findIndex(
-      (item: Deal) => item.date.getTime() < now - (interval * xAxisCount * 1000),
+      (item: dealsInterfaces.Deal) => item.date.getTime() < now - (interval * xAxisCount * 1000),
     );
     if (lastVisibleIdx === -1) lastVisibleIdx = data.length - 1;
     return data.slice(0, lastVisibleIdx + 1);
@@ -84,7 +79,7 @@ class DealsChart extends React.Component<Props, State> {
     return keys;
   }
 
-  getYKeys = ({ data }: { data: Deal[] }): { value: number, label: string }[] => {
+  getYKeys = ({ data }: { data: dealsInterfaces.Deal[] }): { value: number, label: string }[] => {
     const { isDataLoading } = this.props;
     const { yAxisCount } = this.state;
     let min;
@@ -95,7 +90,7 @@ class DealsChart extends React.Component<Props, State> {
     } else {
 
       const dimentions = data.reduce(
-        (prev: minMaxObject, current: Deal) => ({
+        (prev: minMaxObject, current: dealsInterfaces.Deal) => ({
           min: prev.min > current.value ? current.value : prev.min,
           max: prev.max < current.value ? current.value : prev.max,
         }),
@@ -181,6 +176,8 @@ class DealsChart extends React.Component<Props, State> {
         {isMounted && (
           <Chart
             chartHeight={400}
+            dataKeyX="date"
+            dataKeyY="value"
             xKeys={this.getXKeys()}
             yKeys={this.getYKeys({ data: filteredData })}
             data={filteredData}

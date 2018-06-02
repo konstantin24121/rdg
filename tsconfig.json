@@ -5,7 +5,14 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "es2017",
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": "./client",
+    "paths": {
+      "components": ["components"],
+      "containers": ["containers"],
+      "redux/modules": ["redux-modules/modules"],
+      "utils": ["utils"],
+		},
   },
   "include": [
     "./client/**/*"
