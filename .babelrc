@@ -13,10 +13,13 @@
       "decoratorsLegacy": true,
       "loose": true,
     }],
+    "@babel/typescript",
   ],
   "plugins": [
-    ["babel-plugin-styled-components"],
-    ["babel-plugin-lodash"],
+    "babel-plugin-styled-components",
+    "babel-plugin-lodash",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread",
   ],
   "env": {
     "development": {

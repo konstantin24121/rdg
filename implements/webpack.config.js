@@ -21,7 +21,7 @@ const common = {
 			context,
 			'node_modules',
 		],
-		extensions: ['.js', '.jsx', '.json'],
+		extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
 		alias: {
       components: path.resolve(src, 'components'),
       containers: path.resolve(src, 'containers'),
@@ -33,7 +33,7 @@ const common = {
 	module: {
     rules: [
       {
-				test: /\.jsx?(.flow)?$/,
+				test: /\.(t|j)sx?$/,
 				include: [src],
 				loader: 'babel-loader',
 			},

@@ -8,7 +8,7 @@ module.exports = {
     'client': [
       'react-hot-loader/patch',
 	  	'webpack-hot-middleware/client',
-		  path.join(src, 'app.js'),
+		  path.join(src, 'app.jsx'),
 	  ],
 	},
 

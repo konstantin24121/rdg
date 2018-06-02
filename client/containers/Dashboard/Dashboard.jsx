@@ -86,9 +86,6 @@ class Dashboard extends Component {
         <Layout.Indent>
           <Layout.ScrolableContainer>
             <DealsChart
-              chartHeight={400}
-              dataKeyX="date"
-              dataKeyY="value"
               data={deals}
               isDataLoading={isLoading || !isLoaded}
             />

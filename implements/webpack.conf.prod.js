@@ -11,7 +11,7 @@ module.exports = {
   mode: 'production',
 	entry: {
     'client': [
-		  path.join(src, 'app.js'),
+		  path.join(src, 'app.jsx'),
 	  ],
 	},
 
