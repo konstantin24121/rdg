@@ -6,7 +6,7 @@ function ApiError(code, message) {
   };
 }
 
-module.exports = function createApi(app, db) {
+module.exports = function createApi(app, db, io) {
   // Get Deals list
   app.get('/api/deals', (req, res) => {
     const data = db.get('deals').value();
@@ -26,7 +26,7 @@ module.exports = function createApi(app, db) {
 
   // Create new Deal
   app.post('/api/deals', (req, res) => {
-    const { value, date } = req.body;
+    const { value, date, clientId } = req.body;
     if (Number(value) !== value) {
       res.send(ApiError('validation_error', 'Value must be a number'));
     }
@@ -37,18 +37,22 @@ module.exports = function createApi(app, db) {
     db.get('deals')
       .insert({ value, date })
       .write()
-      .then(record => res.send({ success: true, data: record }));
+      .then((record) => {
+        io.emit('new_deal', { ...record, webSocketId: clientId });
+        res.send({ success: true, data: record });
+      });
   });
 
   // Remove Deal by id
   app.delete('/api/deals', (req, res) => {
-    const { id } = req.body;
+    const { id, clientId } = req.body;
     const record = db.get('deals').getById(id).value();
     if (record) {
       db.get('deals')
         .removeById(id)
         .write()
         .then(() => {
+          io.emit('remove_deal', { id, webSocketId: clientId });
           res.send({ success: true, data: { id } });
         });
     } else {

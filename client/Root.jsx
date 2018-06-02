@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { CreateDeal, Dashboard } from 'containers';
+import { connect } from 'react-redux';
 import { Layout, Logo, Button, Text, Route } from 'components';
 import { ThemeProvider } from 'styled-components';
+import socket from 'utils/socket';
+import { ACTIONS as userActions } from 'redux/modules/user';
 import { applyGlobalStyles, theme } from './globalStyled';
 
 class Root extends Component {
   componentWillMount() {
     applyGlobalStyles();
+    socket.connect();
+    socket.io.on('websocetId', this.props.saveWebSocketId);
+    socket.io.on('disconnect', this.props.clearWebSocketId);
   }
 
   render() {
@@ -66,4 +73,14 @@ class Root extends Component {
   }
 }
 
-export default Root;
+Root.propTypes = {
+  saveWebSocketId: PropTypes.func.isRequired,
+  clearWebSocketId: PropTypes.func.isRequired,
+};
+
+const actions = {
+  saveWebSocketId: userActions.saveWebSocketId,
+  clearWebSocketId: userActions.clearWebSocketId,
+};
+
+export default connect(null, actions)(Root);

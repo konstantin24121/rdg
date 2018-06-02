@@ -24,6 +24,11 @@ export default function (state = initialState, { type, payload }) {
     case TYPES.getListFail: {
       return { ...state, isLoading: false };
     }
+    case TYPES.newDeal: {
+      const nextList = [...state.list];
+      nextList.push(payload.response);
+      return { ...state, list: nextList };
+    }
 
     case TYPES.createDeal: {
       const nextList = [...state.list, { id: NEW_ID, ...payload }];

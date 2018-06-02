@@ -10,6 +10,7 @@ export default (list, idx) => {
     return newList.filter(({ id }) => !idx.includes(id));
   }
   const removeIndex = newList.findIndex(({ id }) => id === idx);
+  if (removeIndex === -1) return newList;
   newList.splice(removeIndex, 1);
   return newList;
 };

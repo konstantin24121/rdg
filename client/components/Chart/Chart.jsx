@@ -241,20 +241,12 @@ const keyShape = PropTypes.arrayOf(
   }),
 );
 
-const dataShape = PropTypes.arrayOf(
-  PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    date: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-  }),
-);
-
 Chart.propTypes = {
   dataKeyX: PropTypes.string.isRequired,
   dataKeyY: PropTypes.string.isRequired,
   yKeys: keyShape.isRequired,
   xKeys: keyShape.isRequired,
-  data: dataShape.isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   chartHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isLoading: PropTypes.bool,
   theme: PropTypes.object,

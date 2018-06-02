@@ -3,6 +3,7 @@ const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
 const low = require('lowdb');
+const socetio = require('socket.io');
 const lodashId = require('lodash-id');
 const FileAsync = require('lowdb/adapters/FileAsync');
 
@@ -17,7 +18,9 @@ const app = express();
 app.set('port', (+process.env.PORT) || 3000);
 app.use(bodyParser.json());
 
+const httpServer = http.createServer(app);
 const adapter = new FileAsync(path.join(serverPath, 'db.json'));
+
 low(adapter).then((db) => {
   db._.mixin(lodashId);
   // Rewrite lodashId createID function
@@ -28,19 +31,25 @@ low(adapter).then((db) => {
     const last = this.last(collection);
     return last ? last.id + 1 : 0;
   };
+  const io = socetio(httpServer);
   if (isDevelopment) {
     makeDevServer(app);
   } else {
     makeProdServer(app);
   }
-  createApi(app, db);
+
+  createApi(app, db, io);
+
+  io.on('connect', (socket) => {
+    socket.emit('websocetId', { id: socket.id });
+  });
 
   // Set db default values
   return db.defaults({
     deals: [],
   }).write();
 }).then(() => {
-  http.createServer(app).listen(app.get('port'), (err) => {
+  httpServer.listen(app.get('port'), (err) => {
     if (err) {
       return console.error(err);
     }

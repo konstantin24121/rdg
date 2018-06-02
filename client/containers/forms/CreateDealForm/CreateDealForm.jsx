@@ -5,9 +5,9 @@ import {
   Layout, Button, Input,
 } from 'components';
 
-import { Root, BtnBox } from './CreateNewDealStyled';
+import { Root, BtnBox } from './CreateDealFormStyled';
 
-class CreateNewDeal extends PureComponent {
+class CreateDealForm extends PureComponent {
   constructor(props) {
     super(props);
     this.inputRef = React.createRef();
@@ -64,12 +64,13 @@ class CreateNewDeal extends PureComponent {
         <Layout.Indent size="small">
           <Text>Value</Text>
         </Layout.Indent>
-        <form action="#" noValidate onSubmit={this.handleSubmit}>
+        <form action="#" onSubmit={this.handleSubmit}>
           <Layout.Indent>
             <Input
               addon={() => 'USD'}
               type="number"
               min="0.01"
+              placeholder="0.00"
               step="0.01"
               inputRef={this.inputRef}
               onFocus={this.handleClearError}
@@ -88,12 +89,12 @@ class CreateNewDeal extends PureComponent {
   }
 }
 
-CreateNewDeal.propTypes = {
+CreateDealForm.propTypes = {
   onSubmit: PropTypes.func,
 };
 
-CreateNewDeal.defaultProps = {
+CreateDealForm.defaultProps = {
   onSubmit: () => {},
 };
 
-export default CreateNewDeal;
+export default CreateDealForm;

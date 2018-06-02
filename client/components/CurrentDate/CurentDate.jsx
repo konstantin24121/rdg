@@ -32,7 +32,7 @@ CurrentDate.propTypes = {
 };
 
 CurrentDate.defaultProps = {
-  format: 'MMMM d, YYYY HH:mm:ss',
+  format: 'MMMM D, YYYY HH:mm:ss',
 };
 
 export default CurrentDate;

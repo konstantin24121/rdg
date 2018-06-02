@@ -69,19 +69,21 @@ class ApiClient {
       method: 'get',
       path: ['deals'],
     }),
-    create: ({ value, date }) => this.fetch({
+    create: ({ value, date, socketId }) => this.fetch({
       method: 'post',
       path: ['deals'],
       requestData: {
         value,
         date,
+        clientId: socketId,
       },
     }),
-    delete: ({ id }) => this.fetch({
+    delete: ({ id, socketId }) => this.fetch({
       method: 'delete',
       path: ['deals'],
       requestData: {
         id,
+        clientId: socketId,
       },
     }),
   }

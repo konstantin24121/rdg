@@ -32,7 +32,7 @@ class DealsTable extends React.Component<Props> {
             title: 'Date',
             key: 'date',
             width: '30%',
-            render: ({ value }: IColRender) => (format(value, 'MMM d, YYYY HH:mm:ss')),
+            render: ({ value }: IColRender) => (format(value, 'MMM D, YYYY HH:mm:ss')),
           },
           {
             title: 'Value',

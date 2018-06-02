@@ -126,7 +126,7 @@ class DealsChart extends React.Component<Props, State> {
     this.setState({
       isMounted: true,
     });
-    this.timer = setInterval(this.forceUpdate.bind(this), 60 * 1000);
+    this.timer = setInterval(this.forceUpdate.bind(this), 10 * 1000);
   }
 
   componentWillUnmount() {

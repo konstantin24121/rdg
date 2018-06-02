@@ -1,11 +1,14 @@
 /* eslint-disable no-underscore-dangle, global-require */
+
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import apiClient from 'utils/apiClient';
+import socket from 'utils/socket';
 
 // Add custom params to redux-thunk
 const thunk = thunkMiddleware.withExtraArgument({
   api: apiClient,
+  socket,
 });
 
 const middleware = [
@@ -40,7 +43,6 @@ const configureStore = (initialState) => {
     });
   }
 
-  // apiClient._init();
   return store;
 };
 
