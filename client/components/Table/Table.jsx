@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Layout } from 'components';
-import Loader from 'components/icons/Loader';
+import LoaderIcon from 'components/icons/loader.svg';
 import { Root, Tbl, Td, Row, Th, Pagination, LoaderBox } from './TableStyled';
 
 class Table extends PureComponent {
@@ -14,11 +14,6 @@ class Table extends PureComponent {
 
   getIsPaginationShow = () =>
     this.props.pageSize !== Infinity && this.props.pageSize < this.props.data.length;
-
-  getSortedData = () => {
-    const { data } = this.props;
-    return data.sort((a, b) => b.date - a.date);
-  }
 
   handleChangePage = i => () => {
     this.setState({
@@ -40,10 +35,12 @@ class Table extends PureComponent {
   }
 
   renderRows() {
-    const { cols, pageSize, isLoading } = this.props;
-    const data = this.getSortedData();
+    const { data, cols, pageSize, isLoading } = this.props;
     const isPaginationShow = this.getIsPaginationShow();
+    // If data loading
     if (isLoading) {
+      // And table has pageSize unequal Infinity
+      // Show empty rows
       if (pageSize !== Infinity) {
         const rows = [];
         for (let i = 0; i < pageSize; i += 1) {
@@ -83,6 +80,7 @@ class Table extends PureComponent {
     return rows;
   }
 
+  // Render empty message
   renderEmpty() {
     const { cols } = this.props;
     return (
@@ -125,7 +123,7 @@ class Table extends PureComponent {
       <Root>
         {isLoading && (
           <LoaderBox>
-            <Loader width="50px" />
+            <LoaderIcon width="50px" />
           </LoaderBox>
         )}
         <Layout.ScrolableContainer>

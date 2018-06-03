@@ -1,4 +1,6 @@
 const API_URL = '/api';
+import Socket from 'utils/socket';
+
 class ApiClient {
   /**
    * Return url for fetching from API
@@ -16,14 +18,19 @@ class ApiClient {
    * @param  {string} path        url path to method after version
    * @param  {string} method      request method (GET, POST, e.g)
    * @param  {object} requestData
+   * @param  {boolean} withSocketId flag for adding webSocketId header at headers
    * @return {Promise}
    */
-  fetch({ path, method, requestData }) {
-    const headers = new Headers({
+  fetch({ path, method, requestData, withSocketId }) {
+    const commonHeaders = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-    });
+    };
+    if (withSocketId) {
+      commonHeaders.socketId = Socket.io.id;
+    }
 
+    const headers = new Headers(commonHeaders);
     const url = this.createFetchUrl({ path });
     const request = new Request(url, {
       method,
@@ -77,6 +84,7 @@ class ApiClient {
         date,
         clientId: socketId,
       },
+      withSocketId: true,
     }),
     delete: ({ id, socketId }) => this.fetch({
       method: 'delete',
@@ -85,6 +93,7 @@ class ApiClient {
         id,
         clientId: socketId,
       },
+      withSocketId: true,
     }),
   }
 }

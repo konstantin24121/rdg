@@ -10,6 +10,7 @@ class CurrentDate extends PureComponent {
     };
     this.timer = null;
   }
+
   componentDidMount() {
     this.timer = setInterval(() => {
       this.setState({

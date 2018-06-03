@@ -5,6 +5,8 @@ import { Table, Button, } from 'components';
 import CrossIcon from 'components/icons/cross.svg';
 import LoaderIcon from 'components/icons/loader.svg';
 
+import { RemoveBtnBox } from './DealsTableStyled';
+
 import { IColRender } from 'components/Table';
 
 interface Props {
@@ -43,10 +45,12 @@ class DealsTable extends React.Component<Props> {
             key: 'id',
             width: '20px',
             render: ({ value, item }: IColRender) => (
-              <Button type="link" onClick={this.handleRemove(value)} disabled={item.isRemoving}>
-                {item.isRemoving && <LoaderIcon width="14" />}
-                {!item.isRemoving && <CrossIcon width="14" />}
-              </Button>
+              <RemoveBtnBox>
+                <Button type="link" onClick={this.handleRemove(value)} disabled={item.isRemoving}>
+                  {item.isRemoving && <LoaderIcon width="14" />}
+                  {!item.isRemoving && <CrossIcon width="14" />}
+                </Button>
+              </RemoveBtnBox>
             ),
           },
         ]}

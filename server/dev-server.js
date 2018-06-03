@@ -7,6 +7,7 @@ const webpackConfig = require('../implements/webpack.config');
 
 module.exports = function makeDevServer(app) {
   // Delay for API requests
+  // when server in development mode
   app.use((req, res, next) => {
     if (/^\/api/.test(req.originalUrl)) {
       setTimeout(next, 1000);

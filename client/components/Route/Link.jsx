@@ -9,6 +9,7 @@ class Link extends PureComponent {
     const { to } = this.props;
     historyPush(to);
   }
+
   render() {
     const { to, children } = this.props;
     return (

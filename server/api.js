@@ -1,4 +1,11 @@
 // Api routes
+
+/**
+ * Return Api error
+ * @param       {string} code
+ * @param       {string} message
+ * @constructor
+ */
 function ApiError(code, message) {
   return {
     success: false,
@@ -7,13 +14,14 @@ function ApiError(code, message) {
 }
 
 module.exports = function createApi(app, db, io) {
-  // Get Deals list
+  // Get Deals list from db
   app.get('/api/deals', (req, res) => {
     const data = db.get('deals').value();
     res.send({ success: true, data });
   });
 
   // Get Deal by id
+  // if find, else return error
   app.get('/api/deals/:id', (req, res) => {
     const { id } = req.params;
     const record = db.get('deals').getById(id).value();
@@ -25,8 +33,11 @@ module.exports = function createApi(app, db, io) {
   });
 
   // Create new Deal
+  // and write it in db
+  // Send socket event
   app.post('/api/deals', (req, res) => {
-    const { value, date, clientId } = req.body;
+    const { value, date } = req.body;
+    const { socketId } = req.headers;
     if (Number(value) !== value) {
       res.send(ApiError('validation_error', 'Value must be a number'));
     }
@@ -38,21 +49,24 @@ module.exports = function createApi(app, db, io) {
       .insert({ value, date })
       .write()
       .then((record) => {
-        io.emit('new_deal', { ...record, webSocketId: clientId });
+        io.emit('new_deal', { ...record, webSocketId: socketId });
         res.send({ success: true, data: record });
       });
   });
 
   // Remove Deal by id
+  // if find, else return error
+  // send socket event
   app.delete('/api/deals', (req, res) => {
-    const { id, clientId } = req.body;
+    const { id } = req.body;
+    const { socketId } = req.headers;
     const record = db.get('deals').getById(id).value();
     if (record) {
       db.get('deals')
         .removeById(id)
         .write()
         .then(() => {
-          io.emit('remove_deal', { id, webSocketId: clientId });
+          io.emit('remove_deal', { id, webSocketId: socketId });
           res.send({ success: true, data: { id } });
         });
     } else {

@@ -1,23 +1,18 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Root, Addon, InputField, ErrorMessage } from './InputStyled';
 
-class Input extends PureComponent {
-  render() {
-    const { addon, meta, inputRef, ...inputProps } = this.props;
-    return (
-      <Root>
-        {addon && <Addon>{addon()}</Addon>}
-        <InputField
-          innerRef={inputRef}
-          {...inputProps}
-        />
-        {meta.error && <ErrorMessage>{meta.errorMessage}</ErrorMessage>}
-      </Root>
-    );
-  }
-}
+const Input = ({ addon, meta, inputRef, ...inputProps }) => (
+  <Root>
+    {addon && <Addon>{addon()}</Addon>}
+    <InputField
+      innerRef={inputRef}
+      {...inputProps}
+    />
+    {meta.error && <ErrorMessage>{meta.errorMessage}</ErrorMessage>}
+  </Root>
+);
 
 Input.propTypes = {
   addon: PropTypes.func,

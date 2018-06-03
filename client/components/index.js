@@ -12,3 +12,4 @@ export { default as DealsChart } from './DealsChart';
 export { default as DealsTable } from './DealsTable';
 export { default as Alert } from './Alert';
 export { default as Input } from './Input';
+export { default as Loader } from './Loader';

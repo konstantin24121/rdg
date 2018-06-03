@@ -2,6 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { matchPath, register, unregister } from './utils';
 
+/**
+ * Simple route
+ */
 class Route extends PureComponent {
   componentWillMount() {
     register(this);
@@ -21,7 +24,7 @@ class Route extends PureComponent {
     const { path, render, component } = this.props;
     const match = matchPath(
       window.location.hash,
-      { path },
+      path,
     );
     if (!match) return null;
     if (component) return React.createElement(component, { match });

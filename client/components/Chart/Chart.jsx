@@ -2,8 +2,9 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
 import { throttle } from 'lodash';
-import Loader from 'components/icons/Loader';
-import { Root, Canvas, LoaderBox, TestLabel } from './ChartStyled';
+import LoaderIcon from 'components/icons/loader.svg';
+
+import { Root, Canvas, TestLabel, LoaderBox } from './ChartStyled';
 
 class Chart extends Component {
   constructor(props) {
@@ -64,11 +65,12 @@ class Chart extends Component {
    * @param  {number} height chart field height
    * @return {void}
    */
-  drawLinesAndAxisLabels = ({ ctx, width, height }) => {
+  drawLinesAndAxisLabels = ({ ctx, width, height, labelWidth, labelHeight }) => {
     const { xKeys, yKeys, theme } = this.props;
     const chartWidth = width + theme.chartOffset;
     ctx.lineWidth = 1;
     ctx.strokeStyle = theme.gray300;
+    const yStep = (yKeys[yKeys.length - 1].value - yKeys[0].value) / height;
 
     // Draw yAxis lines and labels if exist
     if (yKeys.length) {
@@ -94,21 +96,36 @@ class Chart extends Component {
 
     // Draw xAxis lines and labels if exist
     if (xKeys.length) {
+      const xStep = (xKeys[xKeys.length - 1].value - xKeys[0].value) / width;
       const xAxisLabelLine = height + theme.chartXAxisOffset;
       const xNumber = xKeys.length - 1;
-      const verticalStep = Math.round(width / xNumber);
       ctx.textBaseline = 'top';
 
       ctx.textAlign = 'start';
       ctx.fillText(xKeys[0].label, theme.chartOffset, xAxisLabelLine);
 
-      ctx.textAlign = 'center';
       for (let i = 1; i < xNumber; i += 1) {
         ctx.beginPath();
-        ctx.moveTo((verticalStep * i) - 0.5, 0);
-        ctx.lineTo((verticalStep * i) - 0.5, height);
+        const x = ((xKeys[i].value - xKeys[0].value) / xStep) + theme.chartOffset;
+        ctx.moveTo(x - 0.5, 0);
+        ctx.lineTo(x - 0.5, height);
         ctx.stroke();
-        ctx.fillText(xKeys[i].label, (verticalStep * i) - 0.5, xAxisLabelLine);
+        // If label is not out of chart
+        if (x > theme.chartOffset) {
+          // If it last left label drow text at start
+          if (x < (labelWidth / 2) + theme.chartOffset) {
+            ctx.textAlign = 'start';
+            ctx.fillText(xKeys[i].label, theme.chartOffset - 0.5, xAxisLabelLine);
+          // If it first rigth label drow text at end
+          } else if (x > chartWidth - (labelWidth / 2)) {
+            ctx.textAlign = 'end';
+            ctx.fillText(xKeys[i].label, chartWidth - 0.5, xAxisLabelLine);
+          } else {
+            // Else drow it at the middle
+            ctx.textAlign = 'center';
+            ctx.fillText(xKeys[i].label, x - 0.5, xAxisLabelLine);
+          }
+        }
       }
 
       ctx.textAlign = 'end';
@@ -185,7 +202,13 @@ class Chart extends Component {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.font = `${theme.fontSizeBase} ${theme.fontFamily}`;
 
-    this.drawLinesAndAxisLabels({ ctx, width: chartWidth, height: chartHeight });
+    this.drawLinesAndAxisLabels({
+      ctx,
+      width: chartWidth,
+      height: chartHeight,
+      labelWidth,
+      labelHeight,
+    });
     this.drawBorder({ ctx, width: chartWidth, height: chartHeight });
     this.drawGraph({ ctx, width: chartWidth, height: chartHeight });
   }
@@ -216,13 +239,13 @@ class Chart extends Component {
       <Root innerRef={this.rootRef} height={chartHeight}>
         {!isLoading && (
           <Fragment>
-            <TestLabel innerRef={this.labelYCheckRef}>{yKeys[0].label}</TestLabel>
-            <TestLabel innerRef={this.labelXCheckRef}>{xKeys[0].label}</TestLabel>
+            <TestLabel innerRef={this.labelYCheckRef}>{yKeys[0].label || yKeys[1].label}</TestLabel>
+            <TestLabel innerRef={this.labelXCheckRef}>{xKeys[0].label || xKeys[1].label}</TestLabel>
           </Fragment>
         )}
         {isHidden && (
           <LoaderBox>
-            <Loader width="50px" />
+            <LoaderIcon width="50px" />
           </LoaderBox>
         )}
         <Canvas
@@ -249,7 +272,7 @@ Chart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   chartHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isLoading: PropTypes.bool,
-  theme: PropTypes.object,
+  theme: PropTypes.object.isRequired,
 };
 
 Chart.defaultProps = {

@@ -21,14 +21,12 @@ const applySectionStyles = ({ theme, color, isGrow }) => css`
     }
   }
 `;
-
 export const Section = styled.div`
   ${applySectionStyles}
   & > * {
     margin: 0 auto;
   }
 `;
-
 Section.defaultProps = {
   color: 'transparent',
   isGrow: false,
@@ -63,7 +61,6 @@ const applyHeaderStyles = ({ theme }) => css`
     padding: 55px ${theme.offset};
   }
 `;
-
 export const Header = styled.div`
   padding: 55px ${({ theme }) => theme.offset};
   display: flex;
@@ -82,7 +79,6 @@ const applyContainerStyles = ({ theme }) => css`
     padding-bottom: 0;
   }
 `;
-
 export const Container = styled.div`
   flex: 1 0 auto;
   width: 100%;
@@ -100,7 +96,6 @@ const applyContainerHeaderStyles = ({ theme }) => css`
     align-items: center;
   }
 `;
-
 export const ContainerHeader = styled.div`
   display: flex;
 
@@ -142,16 +137,13 @@ const applyIndentSize = ({ size, theme }) => {
     }
   }
 };
-
 export const Indent = styled.div`
   width: 100%;
   ${applyIndentSize};
 `;
-
 Indent.propTypes = {
   size: PropTypes.oneOf(['small', 'medium', 'big']),
 };
-
 Indent.defaultProps = {
   size: 'big',
 };
@@ -160,18 +152,15 @@ const applyAlignStyle = ({ justify, align }) => css`
   align-items: ${align};
   justify-content: ${justify};
 `;
-
 export const Align = styled.div`
   width: 100%;
   display: flex;
   ${applyAlignStyle};
 `;
-
 Align.propTypes = {
   justify: PropTypes.string,
   align: PropTypes.string,
 };
-
 Align.defaultProps = {
   justify: 'space-between',
   align: 'flex-start',
@@ -206,7 +195,6 @@ const applyFooterStyles = ({ theme }) => css`
     padding: ${theme.offset};
   }
 `;
-
 export const Footer = styled.div`
   display: flex;
   flex: 0 0 auto;
@@ -219,5 +207,4 @@ export const Footer = styled.div`
     flex-shrink: 0;
   }
   ${applyFooterStyles}
-
 `;

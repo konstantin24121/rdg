@@ -2,13 +2,13 @@
 
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import apiClient from 'utils/apiClient';
-import socket from 'utils/socket';
+import ApiClient from 'utils/apiClient';
+import Socket from 'utils/socket';
 
 // Add custom params to redux-thunk
 const thunk = thunkMiddleware.withExtraArgument({
-  api: apiClient,
-  socket,
+  api: ApiClient,
+  socket: Socket,
 });
 
 const middleware = [

@@ -15,11 +15,10 @@ const createDealFail = () => ({
   type: TYPES.createDealFail,
 });
 export function createDeal({ value, date }) {
-  return async (dispatch, getState, { api, socket }) => {
-    const socketId = socket.io.id;
+  return async (dispatch, getState, { api }) => {
     try {
       dispatch(createDealStart({ value, date }));
-      const response = await api.deals.create({ value, date, socketId });
+      const response = await api.deals.create({ value, date });
       return dispatch(createDealSuccess(response));
     } catch (err) {
       dispatch(createDealFail());
@@ -32,7 +31,7 @@ const removeDealStart = ({ id }) => ({
   type: TYPES.removeDeal,
   payload: { id },
 });
-const removeDealSuccess = ({ id }) => ({
+export const removeDealSuccess = ({ id }) => ({
   type: TYPES.removeDealSuccess,
   payload: { id },
 });
@@ -41,11 +40,10 @@ const removeDealFail = ({ id }) => ({
   payload: { id },
 });
 export function removeDeal({ id }) {
-  return async (dispatch, getState, { api, socket }) => {
-    const socketId = socket.io.id;
+  return async (dispatch, getState, { api }) => {
     try {
       dispatch(removeDealStart({ id }));
-      await api.deals.delete({ id, socketId });
+      await api.deals.delete({ id });
       return dispatch(removeDealSuccess({ id }));
     } catch (err) {
       dispatch(removeDealFail({ id }));
@@ -68,27 +66,14 @@ const getListSuccess = response => ({
 const getListFail = () => ({
   type: TYPES.getListFail,
 });
-const newDeal = response => ({
+export const newDeal = response => ({
   type: TYPES.newDeal,
   payload: { response },
 });
 export function getList() {
-  return async (dispatch, getState, { api, socket }) => {
+  return async (dispatch, getState, { api }) => {
     const { isLoaded } = getState().deals;
     if (isLoaded) return null;
-
-    socket.io.on('new_deal', ({ webSocketId, ...response }) => {
-      if (socket.io.id !== webSocketId) {
-        dispatch(newDeal(response));
-      }
-    });
-
-    socket.io.on('remove_deal', ({ webSocketId, ...response }) => {
-      if (socket.io.id !== webSocketId) {
-        dispatch(removeDealSuccess(response));
-      }
-    });
-
     try {
       dispatch(getListStart());
       const response = await api.deals.list();

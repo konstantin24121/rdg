@@ -22,11 +22,20 @@ const applyAlertType = ({ type, theme }) => {
 const applyAlertSize = ({ size, theme }) => {
   switch (size) {
     case 'small':
-      return css`font-size: ${theme.fontSizeBase}; font-weight: ${theme.fontWeightRegular};`;
+      return css`
+        font-size: ${theme.fontSizeBase};
+        font-weight: ${theme.fontWeightRegular};
+      `;
     case 'medium':
-      return css`font-size: ${theme.fontSizeBig}; font-weight: 500;`;
+      return css`
+        font-size: ${theme.fontSizeBig};
+        font-weight: 500;
+      `;
     default:
-      return css`font-size: ${theme.fontSizeLarge}; font-weight: ${theme.fontWeightBold};`;
+      return css`
+        font-size: ${theme.fontSizeLarge};
+        font-weight: ${theme.fontWeightBold};
+      `;
   }
 };
 
@@ -36,7 +45,6 @@ const Alert = styled.div`
   ${applyAlertType};
   ${applyAlertSize};
 `;
-
 
 Alert.propTypes = {
   type: PropTypes.oneOf(['info', 'success']),

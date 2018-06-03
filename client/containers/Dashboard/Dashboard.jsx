@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 import getPluralForm from 'utils/getPluralForm';
+import Socket from 'utils/socket';
 import {
   ACTIONS as dealsActions,
   SELECTORS as dealSelectors,
@@ -14,7 +14,19 @@ import {
 } from 'components';
 
 class Dashboard extends Component {
+  /**
+   * Return sorted desc deals list by date
+   * @return {Array}
+   */
+  getSortedData = () => {
+    const { deals } = this.props;
+    return deals.sort(
+      (a, b) => b.date.getTime() - a.date.getTime());
+  }
+
   componentWillMount() {
+    Socket.onNewDeal(this.props.newDealBroadcast, { broadcast: true });
+    Socket.onRemoveDeal(this.props.removeDealBroadcast, { broadcast: true });
     this.props.getDealsList();
   }
 
@@ -44,7 +56,7 @@ class Dashboard extends Component {
         <Layout.Indent>
           <Layout.ScrolableContainer>
             <DealsChart
-              data={deals}
+              data={this.getSortedData()}
               isDataLoading={isLoading || !isLoaded}
             />
           </Layout.ScrolableContainer>
@@ -67,7 +79,7 @@ class Dashboard extends Component {
         </Layout.Indent>
         <Layout.Indent>
           <DealsTable
-            data={deals}
+            data={this.getSortedData()}
             isDataLoading={isLoading || !isLoaded}
             onRemove={this.handleRemoveDeal}
           />
@@ -78,11 +90,15 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
+  // ReduxActions
+  getDealsList: PropTypes.func.isRequired,
+  removeDeal: PropTypes.func.isRequired,
+  newDealBroadcast: PropTypes.func.isRequired,
+  removeDealBroadcast: PropTypes.func.isRequired,
+  // Store state
   deals: PropTypes.array,
   isLoading: PropTypes.bool.isRequired,
   isLoaded: PropTypes.bool.isRequired,
-  getDealsList: PropTypes.func.isRequired,
-  removeDeal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -94,6 +110,8 @@ const mapStateToProps = state => ({
 const actions = {
   getDealsList: dealsActions.getList,
   removeDeal: dealsActions.removeDeal,
+  newDealBroadcast: dealsActions.newDeal,
+  removeDealBroadcast: dealsActions.removeDealSuccess,
 };
 
 export default connect(mapStateToProps, actions)(Dashboard);

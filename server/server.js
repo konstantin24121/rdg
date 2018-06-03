@@ -31,6 +31,8 @@ low(adapter).then((db) => {
     const last = this.last(collection);
     return last ? last.id + 1 : 0;
   };
+
+  // Create socket
   const io = socetio(httpServer);
   if (isDevelopment) {
     makeDevServer(app);
@@ -41,19 +43,15 @@ low(adapter).then((db) => {
   createApi(app, db, io);
 
   io.on('connect', (socket) => {
+    // Send to user webSocketId
     socket.emit('websocetId', { id: socket.id });
   });
 
   // Set db default values
-  return db.defaults({
-    deals: [],
-  }).write();
+  return db.defaults({ deals: [] }).write();
 }).then(() => {
   httpServer.listen(app.get('port'), (err) => {
-    if (err) {
-      return console.error(err);
-    }
-
+    if (err) return console.error(err);
     return console.info(`==> 💻  Open http://localhost:${app.get('port')} in a browser to view the app.`);
   });
 });

@@ -30,6 +30,23 @@ export const InputField = styled.input`
   font-size: inherit;
   font-weight: inherit;
   font-family: ${({ theme }) => theme.fontFamily}
+
+  &::placeholder {
+    color: ${({ theme }) => theme.red400}
+  }
+
+  ::-webkit-input-placeholder {
+    color: ${({ theme }) => theme.gray300}
+  }
+  ::-moz-placeholder {
+    color: ${({ theme }) => theme.gray300}
+  }
+  :-ms-input-placeholder {
+    color: ${({ theme }) => theme.gray300}
+  }
+  :-moz-placeholder {
+    color: ${({ theme }) => theme.gray300}
+  }
 `;
 
 const applyErrorStyles = ({ theme }) => css`

@@ -67,5 +67,6 @@ export const LoaderBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0.5;
   background-color: ${({ theme }) => theme.gray150};
 `;

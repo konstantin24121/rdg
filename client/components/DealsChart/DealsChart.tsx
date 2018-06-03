@@ -1,9 +1,10 @@
 import * as React from 'react';
-// import PropTypes from 'prop-types';
 import { throttle } from 'lodash';
 import { Chart } from 'components';
+import { format } from 'date-fns';
 import { Root } from './DealsChartStyled';
 import { INTERFACES as dealsInterfaces } from 'redux/modules/deals';
+import { IChartAxisLabel } from 'components/Chart';
 
 interface Props {
   data: dealsInterfaces.Deal[],
@@ -44,15 +45,12 @@ class DealsChart extends React.Component<Props, State> {
     this.throttledHandleResize = throttle(this.createHandleResize(), 200);
   }
 
-  getSortedData = () => {
-    const { data } = this.props;
-    return data.sort((a: dealsInterfaces.Deal, b: dealsInterfaces.Deal) => b.date.getTime() - a.date.getTime());
-  }
-
-  getData = () => {
-    const { isDataLoading } = this.props;
+  /**
+   * Return only visible deals plus one out of view
+   */
+  getData = (): dealsInterfaces.Deal[] => {
+    const { isDataLoading, data } = this.props;
     const { xAxisCount, interval, isMounted } = this.state;
-    const data = this.getSortedData();
     if (isDataLoading || !isMounted) return [];
     const now = Date.now();
     let lastVisibleIdx = data.findIndex(
@@ -62,24 +60,47 @@ class DealsChart extends React.Component<Props, State> {
     return data.slice(0, lastVisibleIdx + 1);
   }
 
-  getXKeys = () => {
+  /**
+   * Return xKeys
+   */
+  getXKeys = (): IChartAxisLabel[] => {
     const { xAxisCount, interval } = this.state;
-    const now = Date.now();
-    const keys = [];
-    for (let i = 0; i <= xAxisCount; i += 1) {
-      const value = now - (interval * 1000 * i);
+    const seconds = new Date().getSeconds();
+    const firstValues = Date.now();
+    const secondValues = Date.now() - (seconds * 1000);
+    const keys: IChartAxisLabel[] = [{
+      value: firstValues,
+      label: '',
+    }];
+
+    keys.push({
+      value: secondValues,
+      label: format(secondValues, 'HH:mm'),
+    });
+
+    for (let i = 2; i <= xAxisCount + 1 ; i += 1) {
+      const value = keys[i - 1].value - (interval * 1000);
       const timestamp = new Date(value);
-      const hours = `0${timestamp.getHours()}`.slice(-2);
-      const minutes = `0${timestamp.getMinutes()}`.slice(-2);
-      keys.unshift({
+
+      keys.push({
         value,
-        label: `${hours}:${minutes}`,
+        label: format(timestamp, 'HH:mm'),
       });
     }
+
+    keys.push({
+      value: keys[keys.length - 1].value - (interval - seconds * 1000),
+      label: '',
+    });
+
+    keys.reverse();
     return keys;
   }
 
-  getYKeys = ({ data }: { data: dealsInterfaces.Deal[] }): { value: number, label: string }[] => {
+  /**
+   * Return yKeys
+   */
+  getYKeys = ({ data }: { data: dealsInterfaces.Deal[] }): IChartAxisLabel[] => {
     const { isDataLoading } = this.props;
     const { yAxisCount } = this.state;
     let min;
@@ -88,7 +109,7 @@ class DealsChart extends React.Component<Props, State> {
       min = 0;
       max = yAxisCount;
     } else {
-
+      // Find min and max value based on visible deals
       const dimentions = data.reduce(
         (prev: minMaxObject, current: dealsInterfaces.Deal) => ({
           min: prev.min > current.value ? current.value : prev.min,
@@ -102,7 +123,7 @@ class DealsChart extends React.Component<Props, State> {
       const interval = (max - min) / yAxisCount;
       max += interval / 2;
       min -= interval / 2;
-      if (min < 0) min = 0;
+      if (min < 0) min = 0; // Min can't be lower than zero
     }
     const realInterval = (max - min) / yAxisCount;
     const keys = [];
@@ -135,7 +156,10 @@ class DealsChart extends React.Component<Props, State> {
     clearInterval(this.timer);
   }
 
-  createHandleResize = () => {
+  /**
+   * Create function which change xAxisParams after resize
+   */
+  createHandleResize = (): () => void => {
     let prevWidth = 0;
     return () => {
       const chartWidth = this.rootRef.current.clientWidth;

@@ -2,14 +2,12 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ACTIONS as dealsActions, SELECTORS as dealSelectors } from 'redux/modules/deals';
-import CreateNewDealForm from 'containers/forms/CreateNewDeal';
+import CreateDealForm from 'containers/forms/CreateDealForm';
 import {
   Title, Layout, Text,
   CurrentDate, Button, Alert,
-  Route,
+  Route, Loader,
 } from 'components';
-
-import Loader from 'components/icons/Loader';
 
 import { ConfirmedValue, FadeIn, ConfirmedIcon } from './CreateDealStyled';
 
@@ -24,6 +22,7 @@ class CreateDeal extends Component {
   }
 
   componentWillUnmount() {
+    // Clear new deal which we created
     this.props.clearNewDeal();
   }
 
@@ -81,7 +80,7 @@ class CreateDeal extends Component {
           </Layout.ContainerHeader>
         </Layout.Indent>
         <Layout.Indent>
-          {!isSaving && !isSaved && <CreateNewDealForm onSubmit={this.handleCreate} />}
+          {!isSaving && !isSaved && <CreateDealForm onSubmit={this.handleCreate} />}
           {(isSaving || isSaved) && this.renderFeedbackBoard()}
         </Layout.Indent>
       </Fragment>
@@ -90,8 +89,10 @@ class CreateDeal extends Component {
 }
 
 CreateDeal.propTypes = {
+  // ReduxActions
   createDeal: PropTypes.func.isRequired,
   clearNewDeal: PropTypes.func.isRequired,
+  // Store state
   newDeal: PropTypes.object,
 };
 

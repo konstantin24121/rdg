@@ -10,11 +10,11 @@ const Title = ({ size, children, ...props }) => {
 
 Title.propTypes = {
   /**
-   * Размер заголовка
+   * Title html size
    */
   size: PropTypes.number,
   /**
-   * Инлайновый?
+   * Is title must be inline?
    */
   inline: PropTypes.bool,
   children: PropTypes.node,
