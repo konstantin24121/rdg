@@ -8,7 +8,7 @@ const lodashId = require('lodash-id');
 const FileAsync = require('lowdb/adapters/FileAsync');
 
 const createApi = require('./api');
-const makeDevServer = require('./dev-server');
+
 const makeProdServer = require('./prod-server');
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -35,6 +35,7 @@ low(adapter).then((db) => {
   // Create socket
   const io = socetio(httpServer);
   if (isDevelopment) {
+    const makeDevServer = require('./dev-server');
     makeDevServer(app);
   } else {
     makeProdServer(app);
