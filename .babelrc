@@ -1,5 +1,4 @@
 {
-  "sourceMap": true,
   "presets": [
     ["@babel/preset-env", {
       "useBuiltIns": "usage",

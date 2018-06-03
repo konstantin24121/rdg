@@ -4,6 +4,7 @@ class Socket {
   static io;
   checkSocketDate = webSocketId => this.io.id !== webSocketId;
 
+  static handlers;
   /**
    * Start listen socet.io event
    * @param  {string}   event    Event name
@@ -12,6 +13,8 @@ class Socket {
    * @return {void}
    */
   listen = ({ event, callback, options }) => {
+    if (this.handlers.includes(event)) return;
+    this.handlers.push(event);
     this.io.on(event, ({ webSocketId, ...response }) => {
       if (options.broadcast) {
         if (this.checkSocketDate(webSocketId)) {
@@ -45,6 +48,7 @@ class Socket {
    * Connect to server
    */
   connect() {
+    this.handlers = [];
     this.io = io('/');
   }
 }

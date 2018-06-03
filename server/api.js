@@ -37,7 +37,7 @@ module.exports = function createApi(app, db, io) {
   // Send socket event
   app.post('/api/deals', (req, res) => {
     const { value, date } = req.body;
-    const { socketId } = req.headers;
+    const socketId = req.get('socketid');
     if (Number(value) !== value) {
       res.send(ApiError('validation_error', 'Value must be a number'));
     }
@@ -59,7 +59,7 @@ module.exports = function createApi(app, db, io) {
   // send socket event
   app.delete('/api/deals', (req, res) => {
     const { id } = req.body;
-    const { socketId } = req.headers;
+    const socketId = req.get('socketid');
     const record = db.get('deals').getById(id).value();
     if (record) {
       db.get('deals')
