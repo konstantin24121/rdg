@@ -4,6 +4,7 @@
   "author": "Konstantin <konstantin24121@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "postinstall": "npm run build",
     "start": "better-npm-run start-dev",
     "start:prod": "npm run build && better-npm-run start-prod",
     "prebuild": "rimraf public",
